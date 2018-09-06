@@ -1,7 +1,7 @@
 import * as React from 'react'
 import MaptalksCom from '@components/mapComponents/MaptalksCom'
 import './index.scss'
-import {Marker, VectorLayer, WMSTileLayer} from 'maptalks'
+import {Marker, VectorLayer} from 'maptalks'
 import logo from './image/08.png'
 import GISTools from '@components/GISTools'
 import {getIllegalElectromechanicalWellData} from '@api/IllegalElectromechanicalWell'
@@ -124,21 +124,6 @@ export default class IllegalElectromechanicalWell extends React.Component<IProps
       })
     }
   }
-  addBaseLayerToMap = (map) => {
-    // const baseMapLayerUrl = 'http://36.189.255.196:6080/arcgis/rest/services/yanqi/basemap/MapServer'
-    new WMSTileLayer('add', {
-      'urlTemplate' : 'http://36.189.255.196:6080/arcgis/services/yanqi/basemap/MapServer/WMSServer',
-      // 'crossOrigin': 'anonymous',
-      'crs' : 'EPSG:4326',
-      'layers' : '0,1,2,3',
-      // 'styles' : '',
-      'version' : '1.3.0',
-      'format': 'image/png',
-      'transparent' : true,
-      'uppercase' : true,
-      'renderer' : 'canvas'
-    }).addTo(map)
-  }
   /**
    * 获取创建的地图
    *
@@ -151,7 +136,6 @@ export default class IllegalElectromechanicalWell extends React.Component<IProps
     this.setState({
       hasMapLoaded: true
     }, () => {
-      this.addBaseLayerToMap(this.map)
       this.getData()
     })
   }
