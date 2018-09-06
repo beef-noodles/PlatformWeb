@@ -92,7 +92,6 @@ module.exports = {
       '@pages': path.resolve(__dirname, './src/pages'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@stories': path.resolve(__dirname, './src/stories'),
-      '@route': path.resolve(__dirname, './src/route'),
       '@layouts': path.resolve(__dirname, './src/layouts'),
       '@api': path.resolve(__dirname, './src/api'),
       '@assets': path.resolve(__dirname, './src/assets')

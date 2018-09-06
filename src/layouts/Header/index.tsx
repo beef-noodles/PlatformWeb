@@ -15,7 +15,7 @@ export interface IProps {
   theme?: any
   // style?: any
 }
-export default class NavBar extends React.Component<IProps, IState> {
+export default class Header extends React.Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props)
     this.state = {

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import Index from '@route/routers'
+import Layouts from '@layouts/index'
 import './index.scss'
 ReactDOM.render(
-  <Index />,
+  <Layouts />,
   document.getElementById('root') as HTMLElement
 )
 
