@@ -11,7 +11,7 @@
 ## 获取
 
 ```shell
-$ git clone -b summitWeb https://github.com/guzhongren/FrontEndStudy.git
+$ git clone -b summitWeb git@github.com:beef-noodles/PlatformWeb.git
 ...
 ```
 
@@ -19,9 +19,9 @@ $ git clone -b summitWeb https://github.com/guzhongren/FrontEndStudy.git
 
 ```shell
 # use npm
-$ cd FrontEndStudy && npm install
+$ cd PlatformWeb && npm install
 # use yarn
-$ cd FrontEndStudy && yarn install
+$ cd PlatformWeb && yarn install
 ```
 
 ## 启动
@@ -67,7 +67,7 @@ import AjaxTest from '@components/Ajax'
 
 ## 支持环境
 
-* IE>=11
+* IE>9
 * Edge>=15
 * Chrome>=57
 * FireFox>=55
