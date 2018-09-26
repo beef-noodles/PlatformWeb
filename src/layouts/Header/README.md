@@ -8,7 +8,7 @@
 
 **使用注意**
 
-如果 NavBar 设置了自定义高度请进入该组件的 index.scss 文件中修改一个 css,如下
+如果 NavBar 设置了自定义高度请进入该组件的 index.less 文件中修改一个 css,如下
 
 ```scss
 .ant-menu-light{

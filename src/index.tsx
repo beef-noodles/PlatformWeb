@@ -1,7 +1,8 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import Layouts from '@layouts/index'
-import './index.scss'
+
+import './index.less'
 ReactDOM.render(
   <Layouts />,
   document.getElementById('root') as HTMLElement

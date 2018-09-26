@@ -1,8 +1,8 @@
 import * as React from 'react'
-import * as maptalks from 'maptalks'
+import {TileLayer, SpatialReference, Map} from 'maptalks'
 import 'maptalks/dist/maptalks.css'
 import config from './config'
-import './index.scss'
+import './index.less'
 interface IState {
   mapOptions?: object // maptalks的初始化配置信息
 }
@@ -26,7 +26,7 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
     const mapDefaultOptions = {
       center: mapOptions.center,
       zoom: mapOptions.zoom,
-      baseLayer: new maptalks.TileLayer('base', {
+      baseLayer: new TileLayer('base', {
         urlTemplate: mapOptions.baseLayer.urlTemplate,
         subdomains: mapOptions.baseLayer.subdomains,
         attribution: mapOptions.baseLayer.attribution
@@ -71,7 +71,7 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
       if (mapContainer) {
         if (this.props.isArcGISLayer) {
           const arcUrl = this.props.arcGISLayerServiceUrl
-          maptalks.SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err, conf) => {
+          SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err, conf) => {
             if (err) {
               throw new Error(err)
             }
@@ -83,18 +83,19 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
               spatialReference: {
                 projection: 'EPSG:4326'
               },
-              baseLayer: new maptalks.TileLayer('base', {
+              baseLayer: new TileLayer('base', {
                 spatialReference: {
                   projection: 'EPSG:3857'
                 },
                 'urlTemplate': arcUrl + '/tile/{z}/{y}/{x}',
                 'attribution': '&copy; <a target="_blank" href="' + arcUrl + '"">ArcGIS</a>'
-              })
+              }),
+              attribution: false
             }])
-            resolve(new maptalks.Map(mapContainer, options))
+            resolve(new Map(mapContainer, options))
           })
         } else {
-          resolve(new maptalks.Map(this.mapContainer, this.state.mapOptions))
+          resolve(new Map(this.mapContainer, this.state.mapOptions))
         }
       } else {
         reject('Invalid map container div')

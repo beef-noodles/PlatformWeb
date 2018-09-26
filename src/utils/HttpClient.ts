@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import * as Login from '@utils/Login'
 // 自定义判断元素类型JS
 function toType(obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
@@ -33,6 +34,10 @@ function apiAxios(method, url, params) {
     params = filterNull(params)
   }
   return new Promise((resolve, reject) => {
+    if (!Login.default.GetLoginState()) {
+      // window.location.href = './index.html'
+    }
+    axios.defaults.headers.common.Authorization = 'AUTH_TOKEN'
     axios({
       method,
       url,
@@ -41,17 +46,22 @@ function apiAxios(method, url, params) {
       withCredentials: false
     })
       .then((res) => {
-        if (res.status === 200 && res.statusText === 'OK') {
-          resolve(res.data)
+        if (res.status === 200) {
+          const data = res.data
+          if (data.code === 200) {
+            resolve(data.data)
+          } else {
+            reject('Axios成功，但后台处理错误，赶紧看看后台去')
+          }
         } else {
-          reject(res.data)
+          reject('Axios返回状态不对，查看请求处理过程．．．．')
         }
       }, err => {
         reject(err)
       })
       .catch((err) => {
-        const res = err.response
-        reject(res)
+        const errInfo = {'err': err.response}
+        reject(errInfo)
       })
   })
 }

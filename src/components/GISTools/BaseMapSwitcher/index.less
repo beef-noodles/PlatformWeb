@@ -1,0 +1,59 @@
+
+@import '../../../theme/theme.less';
+
+.baseMapSwitcher {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid @primary-color;
+  border-radius: 2px;
+  &:hover {
+    background-color: #fff;
+    padding: 8px;
+    border: none;
+  }
+  .baseMapList {
+    display: flex;
+    justify-content: space-between;
+    width: 90px;
+    box-shadow: @box-shadow-base;
+    transition: all @transition-duration;
+    &:hover {
+      width: 280px;
+      .baseMapItem {
+        .label {
+          display: inline;
+        }
+      }
+      .hasSelectedItem {
+        border: 1px solid @primary-color;
+        .label{
+          background-color: @primary-color;
+          display: inline !important;
+        }
+      }
+    }
+    
+    .baseMapItem {
+      width: 86px;
+      height: 60px;
+      border-radius: @theme-border-radius;
+      &:first-child{
+        background-color: red;
+      }
+      &:hover{
+        border: 1px solid @primary-color;
+        .label {
+          background-color: @primary-color;
+          color: @front-color;
+        }
+      }
+      .label{
+        padding: 3px;
+        color: @theme-font-color1;
+        display: none;
+        transition: all @transition-duration;
+      }
+    }
+  }
+}

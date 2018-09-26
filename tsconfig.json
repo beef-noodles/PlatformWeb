@@ -24,6 +24,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
+      "@config/*": ["./src/config/*"],
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
       "@utils/*": ["./src/utils/*"],
@@ -31,6 +32,8 @@
       "@layouts/*": ["./src/layouts/*"],
       "@api/*": ["./src/api/*"],
       "@assets/*": ["./src/assets/*"],
+      "@theme/*": ["./src/theme/*"],
+      
     }
   },
   "include": [

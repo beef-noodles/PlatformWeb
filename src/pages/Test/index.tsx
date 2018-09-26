@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button, Input, Breadcrumb, Modal, Icon } from 'antd'
-import './App.scss'
+import './App.less'
 import logo from './image/logo.svg'
 import MaptalksCom from '@components/mapComponents/MaptalksCom'
 import Summit, { Topic } from '@components/test/Summit'
@@ -14,6 +14,10 @@ import AjaxTest from '@components/test/Ajax'
 import PubSub from 'pubsub-js'
 import Draggable from 'react-draggable'
 import classNames from 'classnames'
+import { ControlFooterDisplay, ControlHeaderDisplay } from '@pages/PageUtils'
+import {GetWatf} from '@api/Map'
+import Animate from 'rc-animate'
+import velocity from 'velocity-animate'
 
 interface IState {
   SummitMessage?: string,
@@ -21,10 +25,25 @@ interface IState {
   echartsOption?: any,
   modelVisible?: boolean,
   isTestClassName?: boolean
+  visible?: boolean
+  exclusive?: boolean
+  data?: object[]
 }
 export interface IProps {
   empty?: any
 }
+
+
+const Box = (props) => {
+  const style = {
+    width: '200px',
+    display: props.visible ? 'block' : 'none',
+    height: '200px',
+    backgroundColor: 'red',
+  }
+  return (<div style={style} />)
+}
+
 
 class App extends React.Component<IProps, IState> {
 
@@ -34,8 +53,13 @@ class App extends React.Component<IProps, IState> {
       SummitMessage: '',
       WebMessage: '',
       echartsOption: this.getOption(),
-      modelVisible: true
+      modelVisible: true,
+      visible: true,
+      exclusive: false,
+      data: []
     }
+    ControlFooterDisplay()
+    ControlHeaderDisplay()
     this.receiveFromSummit = this.receiveFromSummit.bind(this)
     this.receiveFromWeb = this.receiveFromWeb.bind(this)
     this.getOption = this.getOption.bind(this)
@@ -115,10 +139,79 @@ class App extends React.Component<IProps, IState> {
     this.setState({
       isTestClassName: !this.state.isTestClassName
     })
+    GetWatf().then((data: any) => {
+      this.setState({
+        data
+      })
+    }, err => {console.log(err)})
   }
+
+  animateLeave = (node, done) => {
+    let ok = false
+
+    function complete() {
+      if (!ok) {
+        ok = true
+        done()
+      }
+    }
+
+    node.style.display = 'block'
+
+    velocity(node, 'slideUp', {
+      duration: 1000,
+      complete,
+    })
+    return {
+      stop() {
+        velocity(node, 'finish')
+        // velocity complete is async
+        complete()
+      },
+    }
+  }
+
+  animateEnter = (node, done) => {
+    let ok = false
+
+    function complete() {
+      if (!ok) {
+        ok = true
+        done()
+      }
+    }
+
+    node.style.display = 'none'
+
+    velocity(node, 'slideDown', {
+      duration: 1000,
+      complete,
+    })
+    return {
+      stop() {
+        velocity(node, 'finish')
+        // velocity complete is async
+        complete()
+      },
+    }
+  }
+
+  toggle = (field) => {
+    this.setState({
+      [field]: !this.state[field],
+    })
+  }
+
+
+
+
   // ================= pubsub.js===============
   public render() {
-    const testClassNames = classNames({'classNameTest': this.state.isTestClassName})
+    const anim = {
+      enter: this.animateEnter,
+      leave: this.animateLeave,
+    }
+    const testClassNames = classNames({ 'classNameTest': this.state.isTestClassName })
     const reactEchartsOptions = this.state.echartsOption!
     return (
       <div className='App'>
@@ -138,7 +231,7 @@ class App extends React.Component<IProps, IState> {
           <Breadcrumb.Item>An Application</Breadcrumb.Item>
         </Breadcrumb>
         <Summit message={this.state.SummitMessage} onSay={this.receiveFromSummit} />
-        <h3>分割线哈<Icon type='link' /><Button type='primary' icon='search'> <Icon type='github'/>Search</Button></h3>
+        <h3>分割线哈<Icon type='link' /><Button type='primary' icon='search'> <Icon type='github' />Search</Button></h3>
         <MaterialButton variant='contained' color='primary'>
           Hello World
         </MaterialButton>
@@ -167,19 +260,50 @@ class App extends React.Component<IProps, IState> {
           notMerge={true}
           lazyUpdate={true}
           opts={{ renderer: 'svg' }} />
+
+        <div>
+           <h3>react简单动画示例rc-animate+velocity-animate</h3>
+          <label><input type='checkbox' onChange={() => { this.toggle('visible') }} checked={this.state.visible} />
+            show</label>
+          &nbsp;
+        <Animate
+            component=''
+            exclusive={this.state.exclusive}
+            showProp='visible'
+            animation={anim}
+          >
+            <Box visible={this.state.visible} />
+          </Animate>
+        </div>
+
+
+
+
         <div style={{ width: '100%', height: '300px' }} id='test_echarts' />
         <Modal
           title='Basic Modal'
           visible={this.state.modelVisible}
           onOk={this.handleOk}
-          // onCancel={this.handleCancel}
+        // onCancel={this.handleCancel}
         >
           <p>Some contents...</p>
           <p>Some contents...</p>
           <p>Some contents...</p>
         </Modal>
         <span className={testClassNames}>classnames 测试</span> <Button onClick={this.testClassNames}>测试classNames</Button>
+        <div>后台数据交互{
+          this.state.data!.map((item: any, key) => {
+            return(
+              <span key={item.stacd}>{item.stcd}</span>
+            )
+          })
+        }</div>
       </div>
+
+      // react中的动画
+
+
+
     )
   }
 }

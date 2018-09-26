@@ -1,17 +1,25 @@
 import * as React from 'react'
-import { Carousel } from 'antd'
-import './index.scss'
-// const HelloWorld = () => <div>Hello world</div>
-// export default HelloWorld
-export default class First extends React.Component {
+import './index.less'
+import Config from '@config/index'
+import { ControlFooterDisplay, ControlHeaderDisplay } from '@pages/PageUtils'
+
+interface IState {
+  hasMapLoaded?: boolean
+}
+
+export default class Index extends React.Component<any, IState> {
+  map: any
+  constructor(props: any) {
+    super(props)
+    ControlFooterDisplay()
+    ControlHeaderDisplay()
+  }
+
   render() {
     return (
-      <Carousel autoplay>
-        <div><h3>1</h3></div>
-        <div><h3>2</h3></div>
-        <div><h3>3</h3></div>
-        <div><h3>4</h3></div>
-      </Carousel>
+      <div>
+        {Config.projectName}
+      </div>
     )
   }
 }

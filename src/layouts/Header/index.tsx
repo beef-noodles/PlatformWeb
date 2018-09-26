@@ -1,5 +1,5 @@
 import * as React from 'react'
-import './index.scss'
+import './index.less'
 import { Menu, Icon } from 'antd'
 import { NavLink } from 'react-router-dom'
 
@@ -15,7 +15,7 @@ export interface IProps {
   theme?: any
   // style?: any
 }
-export default class Header extends React.Component<IProps, IState> {
+export default class NavBar extends React.Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props)
     this.state = {
@@ -38,14 +38,19 @@ export default class Header extends React.Component<IProps, IState> {
           <Menu.Item style={menuStyle} key='home'>
             <NavLink  to='/'>
               <Icon type='home' />
-              home
+              主页
             </NavLink>
           </Menu.Item>
-
+          <Menu.Item style={menuStyle} key='map'>
+            <NavLink  to='/map'>
+              <Icon type='environment' />
+              地图
+            </NavLink>
+          </Menu.Item>
           <Menu.Item style={menuStyle} key='demo'>
             <NavLink  to='/demo'>
-              <Icon type='appstore-o' />
-              demo
+              <Icon type='appstore-o'/>
+              Demo示例
             </NavLink>
           </Menu.Item>
           <Menu.Item style={menuStyle} key='11'>

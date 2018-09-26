@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import { Spin } from 'antd'
-
+import Loading from '../Loading'
 interface IProps {
   load: () => Promise<any>,
   children: (com: React.Component) => React.ReactNode
@@ -27,7 +26,7 @@ class DynamicImport extends Component<IProps, IState> {
     if (this.state.component) {
       return this.props.children(this.state.component)
     } else {
-      return <Spin size={'large'} spinning={this.state.component ? true : false} tip={'加载中'} />
+      return <Loading />
     }
     
   }

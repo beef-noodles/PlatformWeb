@@ -1,5 +1,5 @@
 import * as React from 'react'
-import HttpClient from '@utils/HttpClient'
+// import HttpClient from '@utils/HttpClient'
 import { List, Avatar, Button } from 'antd'
 
 
@@ -31,33 +31,33 @@ export default class AjaxTest extends React.Component<IProps, IState> {
   }
 
   componentWillMount() {
-    HttpClient.get('/booksAPI/books', {}).then((res: any) => {
-      // console.log(res)
-      this.setState({
-        books: res.data
-      }, () => {
-        // console.log('tset', this.state.books)
-      })
-    })
+    // HttpClient.get('/booksAPI/books', {}).then((res: any) => {
+    //   // console.log(res)
+    //   this.setState({
+    //     books: res.data
+    //   }, () => {
+    //     // console.log('tset', this.state.books)
+    //   })
+    // })
   }
   componentDidMount() {
-    HttpClient.get('/api/0.4/?randomapi', {}).then((res: any) => {
-      if (res!.results!.length > 0) {
-        const length = res.results.length
-        this.setState({
-          userInfo: res.results[length - 1].user
-        })
-      }
-    }, err => {
-      console.log(err)
-    })
-    HttpClient.get('/gank/api/xiandu/category/wow', {}).then((res: any) => {
-      if (res!.results!.length > 0) {
-        this.setState({
-          ganks: res.results
-        })
-      }
-    })
+    // HttpClient.get('/randomuser/0.4/?randomapi', {}).then((res: any) => {
+    //   if (res!.results!.length > 0) {
+    //     const length = res.results.length
+    //     this.setState({
+    //       userInfo: res.results[length - 1].user
+    //     })
+    //   }
+    // }, err => {
+    //   console.log(err)
+    // })
+    // HttpClient.get('/gank/api/xiandu/category/wow', {}).then((res: any) => {
+    //   if (res!.results!.length > 0) {
+    //     this.setState({
+    //       ganks: res.results
+    //     })
+    //   }
+    // })
 
   }
   /**

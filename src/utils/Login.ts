@@ -3,13 +3,13 @@
  */
 const KEY = 'USER'
 export default {
-  setLoginState: (userInfo) => {
+  SetLoginState: (userInfo) => {
     window.sessionStorage.setItem(KEY, JSON.stringify(userInfo))
   },
-  getLoginState: () => {
+  GetLoginState: () => {
     return window.sessionStorage.getItem(KEY)
   },
-  deleteLoginState: () => {
+  DeleteLoginState: () => {
     return new Promise((resolve, reject) => {
       window.sessionStorage.removeItem(KEY) ? resolve({ 'isDeleted': true }) : reject({ 'isDeleted': false })
     })

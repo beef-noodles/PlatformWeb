@@ -3,16 +3,16 @@ import * as maptalks from 'maptalks'
 
 import { message } from 'antd'
 
-import './index.scss'
+import './index.less'
 import Draggable from 'react-draggable'
-import BaseTool from './BaseTool'
+import BaseToolItem from './BaseTool/BaseToolItem'
 import b2 from './img/b2.png'
 import b3 from './img/b3.png'
 import b4 from './img/b4.png'
 import b5 from './img/b5.png'
 import area from './img/area.png' // 面积测量图标
 import clear from './img/clear.png' // 清除图标
-import print from './img/print.png'
+// import print from './img/print.png'
 
 
 interface ITool {
@@ -24,7 +24,8 @@ interface ITool {
 interface IProps {
   className?: string, // 样式
   map: any, // 地图实例
-  orientation?: 'row' | 'row-reverse' | 'column' | 'column-reverse', // 工具条的方向， 默认水平
+  orientation?: string, // 工具条的方向， 默认水平
+  toolArr?: ITool[], // 工具条工具集合
 }
 
 interface IState {
@@ -44,39 +45,40 @@ class GISTools extends React.Component<IProps, IState> {
     super(props)
     this.state = {
       orientation: 'row',
-      toolArr: [{
+      toolArr:  [{
         imgPath: b2,
         tips: '测距',
         handler: this.measureDistance,
-        placement: 'top'
+        placement: 'left'
       } ,
       {
         imgPath: area,
         tips: '测面',
         handler: this.measureArea,
-        placement: 'top'
+        placement: 'left'
       }
       , {
         imgPath: b3,
         tips: '全图',
         handler: this.fullExtentHandle,
-        placement: 'top'
+        placement: 'left'
       }, {
         imgPath: b4,
         tips: '缩小',
         handler: this.zoomOutHandle,
-        placement: 'top'
+        placement: 'left'
       }, {
         imgPath: b5,
         tips: '放大',
         handler: this.zoomInHandle,
-        placement: 'top'
-      }, {
-        imgPath: print,
-        tips: '打印',
-        handler: this.print,
-        placement: 'top'
-      },
+        placement: 'left'
+      }, 
+      // {
+      //   imgPath: print,
+      //   tips: '打印',
+      //   handler: this.print,
+      //   placement: 'top'
+      // },
        {
         imgPath: clear,
         tips: '清除',
@@ -305,7 +307,7 @@ class GISTools extends React.Component<IProps, IState> {
     return (
       this.state.toolArr!.map((item, key) => {
         return (
-          <BaseTool key={key}  imgPath={item.imgPath} tips={item.tips} onClick={item.handler.bind(this)} placement={item.placement}/>
+          <BaseToolItem key={key}  imgPath={item.imgPath} tips={item.tips} onClick={item.handler.bind(this)} placement={item.placement}/>
         )
       })
     )

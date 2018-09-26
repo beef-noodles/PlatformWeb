@@ -1,6 +1,6 @@
 import * as React from 'react'
-import Draggable from 'react-draggable'
-import './index.scss'
+// import Draggable from 'react-draggable'
+import './index.less'
 
 
 
@@ -39,15 +39,27 @@ export default class DirectTool extends React.Component<IProps, IState> {
 
   /**
    * 将translate属性的角度值转化为view中的bearing值
+   * flag  // 0代表逆时针 ,1代表顺时针
    */
-  angleToBearing = (angle: number) => {
+  angleToBearing = (angle: number, flag : number) => {
     let currentBearing
-    const temp = Math.abs(angle % 360)
-    if (temp > 180) {
-      currentBearing =  -(360 - temp)
-    } else {
-      currentBearing = temp
+    // const temp = angle % 360
+    const tempABS = Math.abs(angle % 360)
+
+    if (flag === 0) {  // 逆时针
+      if (tempABS > 180) {
+        currentBearing =  -(360 - tempABS)
+      } else {
+        currentBearing = tempABS
+      }
+    } else {   // 顺时针
+      if (tempABS > 180) {
+        currentBearing =  (360 - tempABS)
+      } else {
+        currentBearing = -tempABS
+      }
     }
+   
     return currentBearing
   }
 
@@ -69,11 +81,20 @@ export default class DirectTool extends React.Component<IProps, IState> {
    * 逆时针旋转
    */
   counterclockwiseRotate = (changeAngle: number) => {
+    let flag = 0 // 0代表逆时针
+    const preAngle = this.state.rotateAngle!
     const currentAngle = this.state.rotateAngle! - changeAngle
     this.setState({
       rotateAngle: currentAngle
-    })
-    this.map.setBearing(this.angleToBearing  (currentAngle))
+    }, )
+    if ( preAngle < currentAngle) { // 相当于逆时针
+      flag = 0
+      this.map.setBearing(this.angleToBearing  (currentAngle, flag))
+      
+    } else {
+      flag = 1
+      this.map.setBearing(this.angleToBearing  (currentAngle, flag))
+    }
     
   }
 
@@ -81,11 +102,21 @@ export default class DirectTool extends React.Component<IProps, IState> {
    * 顺时针旋转
    */
   clockwiseRotate = (changeAngle: number) => {
+    let flag = 1 // 1代表顺时针
+    const preAngle = this.state.rotateAngle!
     const currentAngle = this.state.rotateAngle! + changeAngle
+
     this.setState({
       rotateAngle: currentAngle
     })
-    this.map.setBearing(this.angleToBearing  (currentAngle))
+    if ( preAngle > currentAngle) { // 相当于逆时针
+      flag = 0
+      this.map.setBearing(this.angleToBearing  (currentAngle, flag))
+      
+    } else {
+      flag = 1
+      this.map.setBearing(this.angleToBearing  (currentAngle, flag))
+    }
   }
   /**
    * 将方向指针位置和地图方位恢复到初始化
@@ -122,13 +153,13 @@ export default class DirectTool extends React.Component<IProps, IState> {
     }
 
     return (
-      <Draggable axis='both' >
+      // <Draggable axis='both' >
         <div className={`${'direction ' + (this.props.className ? this.props.className : '')}`}>
           <button title='逆时针转动' className='counterclockwise' onClick={this.counterclockwiseRotate.bind(this, 30)} />
           <button title='恢复正北方向' className='directionPointer'  onClick={this.bearingAnaAngleReset.bind( 0, 0 , 0)} style={ratoteStyle} />
           <button title='顺时针转动' className='clockwise' onClick={this.clockwiseRotate.bind(this, 30)} />
         </div>
-      </Draggable>
+      // </Draggable>
     )
   }
 }

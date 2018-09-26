@@ -1,3 +1,4 @@
+
 const isProduction = process.env.NODE_ENV === 'production'
 const webpack = require('webpack')
 const path = require('path')
@@ -8,6 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 const HappyPack = require('happypack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const tsImportPluginFactory = require('ts-import-plugin')
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -35,7 +37,7 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {
+      '/randomuser': {
         target: 'https://randomuser.me',
         secure: false,
         changeOrigin: true
@@ -55,6 +57,9 @@ module.exports = {
       },
       '/WMS': {
         target: 'http://36.189.255.196:9101'
+      },
+      '/api': {
+        target: 'http://192.168.140.212:8888'
       }
     }
   },
@@ -86,83 +91,87 @@ module.exports = {
   },
   devtool: isProduction ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', 'config.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
+      '@config': path.resolve(__dirname, './src/config'),
       '@components': path.resolve(__dirname, './src/components'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@stories': path.resolve(__dirname, './src/stories'),
       '@layouts': path.resolve(__dirname, './src/layouts'),
       '@api': path.resolve(__dirname, './src/api'),
-      '@assets': path.resolve(__dirname, './src/assets')
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@theme': path.resolve(__dirname, './src/theme')
     }
   },
   module: {
-    rules: [{
-      test: /\.(jsx|tsx|js|ts)$/,
-      loader: 'awesome-typescript-loader',
-      exclude: /node_modules/
-    },
-    {
-      enforce: 'pre',
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: [
-        'happypack/loader?id=babel'
-      ]
-    },
-    {
-      test: /\.(sa|sc|c)ss$/,
-      use: [
-        'css-hot-loader',
-        MiniCssExtractPlugin.loader,
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 1,
-            moudles: true,
-            localIdentName: '[local]_[hash:base64:6]',
-            minimize: true
+    rules: [
+      {
+        test: /\.(jsx|tsx|js|ts)$/,
+        loader: 'awesome-typescript-loader',
+        exclude: /node_modules/
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          'happypack/loader?id=babel'
+        ]
+      },
+      {
+        test: /\.(le|sa|sc|c)ss$/,
+        use: [
+          'css-hot-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              // modules: true,
+              localIdentName: '[local]_[hash:base64:6]',
+              minimize: isProduction
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: !isProduction,
+              ident: 'postcss'
+            }
+          },
+          {
+            loader: 'resolve-url-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+              sourceMap: !isProduction
+            }
           }
-        },
-        {
-          loader: 'postcss-loader',
+        ]
+      },
+      {
+        test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
+        use: [{
+          loader: 'url-loader',
           options: {
-            sourceMap: !isProduction,
-            ident: 'postcss'
+            limit: 1 * 1024,
+            name: 'images/[hash:6].[ext]',
+            fallback: 'file-loader'
           }
-        },
-        {
-          loader: 'resolve-url-loader'
-        },
-        {
-          loader: 'sass-loader',
+        }]
+      },
+      {
+        test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
+        use: [{
+          loader: 'file-loader',
           options: {
-            sourceMap: !isProduction
+            name: 'fonts/[hash:6].[ext]'
           }
-        }
-      ]
-    },
-    {
-      test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
-      use: [{
-        loader: 'url-loader',
-        options: {
-          limit: 1 * 1024,
-          name: 'images/[hash:6].[ext]',
-          fallback: 'file-loader'
-        }
-      }]
-    },
-    {
-      test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
-      use: [{
-        loader: 'file-loader',
-        options: {
-          name: 'fonts/[hash:6].[ext]'
-        }
-      }]
-    }
+        }]
+      }
     ]
   },
   target: 'web',
@@ -184,7 +193,6 @@ module.exports = {
   ].concat(!isProduction ? [
     new webpack.HotModuleReplacementPlugin()
   ] : [
-    // DllPlugin
     new CleanWebpackPlugin('./build'),
     new WebpackParallelUglifyPlugin({
       uglifyES: {
@@ -219,11 +227,14 @@ module.exports = {
     //   logLevel: 'info'
     // })，
     new HtmlWebpackPlugin({
-      title: 'Platform',
+      title: 'Summit Platform',
       hash: true,
       filename: '../index.html',
       template: './public/template.html',
       favicon: path.resolve(__dirname, 'public/favicon.ico'),
+      meta: {
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+      },
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -238,6 +249,11 @@ module.exports = {
       },
       chunksSortMode: 'none',
       cache: true
-    })
+    }),
+    new CopyWebpackPlugin([{
+      from: './public/config.js',
+      to: path.resolve(__dirname, 'build'),
+      toType: 'dir'
+    }])
   ])
 }

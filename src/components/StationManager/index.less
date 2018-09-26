@@ -1,0 +1,42 @@
+@import '../../theme/theme.less';
+
+@inputSearchWidth: 350px; // 顶部搜索框的宽度
+
+.stationManager{
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  background-color: @theme-input-background-color;
+  border-radius: @theme-border-radius;
+  box-shadow: @box-shadow-base;
+  &:focus-within{
+    border: 1px solid @primary-color;
+  }
+  .stationInput {
+    width: @inputSearchWidth;
+    height: 30px;
+  }
+  .menuDrawerIcon{
+    font-size: 30px;
+    color:@disabled-color;
+    transition: all @transition-duration;
+    &:hover {
+      color: @primary-color;
+      cursor: pointer;
+    }
+  }
+  .inputSearch {
+    font-size: 30px;
+    transition: all @transition-duration;
+    color: @disabled-color;
+    &:hover{
+      color: @primary-color;
+    }
+  }
+  .ableToSearch {
+    color: @primary-color;
+  }
+
+}
+
