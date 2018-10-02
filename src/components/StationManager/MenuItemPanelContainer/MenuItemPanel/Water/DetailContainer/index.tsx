@@ -12,9 +12,11 @@ interface IProps {
   visible? : boolean // 控制组件的显隐
   listKey ? : string
   coreOpenAndDetailClose : () => void
+  // data ?: any
 }
-export default class MenuPanelContainer extends React.Component<IProps , IState> {
+export default class DetailContainer extends React.Component<IProps , IState> {
   isMount? : boolean
+  // data = this.props.data
   constructor(props : IProps  , state : IState ) {
     super(props)
     this.state = {
@@ -91,7 +93,7 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
     }
     return (
       <Animate component='' showProp='visible' animation={anim} >
-          <Detail coreOpenAndDetailClose = {this.coreOpenAndDetailClose} listKey = {this.state.listKey} visible= {this.state.visible} />
+          <Detail  coreOpenAndDetailClose = {this.coreOpenAndDetailClose} listKey = {this.state.listKey} visible= {this.state.visible} />
       </Animate>
     )
   }

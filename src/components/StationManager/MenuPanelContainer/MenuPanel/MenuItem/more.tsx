@@ -13,7 +13,7 @@ interface IProps {
   onClick: () => void
 }
 
-export default class MoreMenu extends React.Component<IProps, any> {
+export default class MoreMenuItem extends React.Component<IProps, any> {
   constructor(props: IProps, stage: any) {
     super(props)
   }

@@ -40,7 +40,10 @@ module.exports = {
       '/randomuser': {
         target: 'https://randomuser.me',
         secure: false,
-        changeOrigin: true
+        changeOrigin: true,
+        pathRewrite: {
+          '/randomuser': ''
+        }
       },
       '/gank': {
         target: 'http://gank.io',
@@ -59,7 +62,8 @@ module.exports = {
         target: 'http://36.189.255.196:9101'
       },
       '/api': {
-        target: 'http://192.168.140.212:8888'
+        // target: 'http://192.168.140.212:8888' // 叶腾
+        target: 'http://192.168.140.133:8080'
       }
     }
   },
@@ -157,9 +161,10 @@ module.exports = {
         use: [{
           loader: 'url-loader',
           options: {
-            limit: 1 * 1024,
+            limit: 8192,
             name: 'images/[hash:6].[ext]',
-            fallback: 'file-loader'
+            fallback: 'file-loader',
+            publicPath: './dist/'
           }
         }]
       },

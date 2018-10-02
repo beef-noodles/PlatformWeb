@@ -62,6 +62,9 @@ export default class Summit extends React.Component<IProps, IState> {
       })
     }
   }
+  componentWillUnmount() {
+    PubSub.unsubscribe(Topic)
+  }
   render() {
     const receiveMessage = this.state.receivedMessage
     return (

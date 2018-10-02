@@ -161,7 +161,7 @@ class MeasureTool extends React.Component<IProps, IState> {
       'symbol': {
         'lineColor' : '#1bbc9b',
         'lineWidth' : 2,
-        'polygonFill' : '#fff',
+        'polygonFill' : '#34495e',
         'polygonOpacity' : 0.3
       },
       'vertexSymbol' : {

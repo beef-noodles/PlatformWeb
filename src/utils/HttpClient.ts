@@ -34,6 +34,7 @@ function apiAxios(method, url, params) {
     params = filterNull(params)
   }
   return new Promise((resolve, reject) => {
+    
     if (!Login.default.GetLoginState()) {
       // window.location.href = './index.html'
     }
@@ -48,7 +49,7 @@ function apiAxios(method, url, params) {
       .then((res) => {
         if (res.status === 200) {
           const data = res.data
-          if (data.code === 200) {
+          if (data.success) {
             resolve(data.data)
           } else {
             reject('Axios成功，但后台处理错误，赶紧看看后台去')

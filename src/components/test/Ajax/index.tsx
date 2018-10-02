@@ -41,7 +41,7 @@ export default class AjaxTest extends React.Component<IProps, IState> {
     // })
   }
   componentDidMount() {
-    // HttpClient.get('/randomuser/0.4/?randomapi', {}).then((res: any) => {
+    // HttpClient.get('/randomuser/api/', {}).then((res: any) => {
     //   if (res!.results!.length > 0) {
     //     const length = res.results.length
     //     this.setState({
@@ -49,7 +49,7 @@ export default class AjaxTest extends React.Component<IProps, IState> {
     //     })
     //   }
     // }, err => {
-    //   console.log(err)
+    //   console.error(err)
     // })
     // HttpClient.get('/gank/api/xiandu/category/wow', {}).then((res: any) => {
     //   if (res!.results!.length > 0) {

@@ -2,7 +2,8 @@ import * as React from 'react'
 import './index.less'
 import { Menu, Icon } from 'antd'
 import { NavLink } from 'react-router-dom'
-
+import logo from './img/logo.png'
+import Config from '@config/index'
 const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
 
@@ -35,6 +36,11 @@ export default class NavBar extends React.Component<IProps, IState> {
     }
     return (
         <Menu theme={this.props.theme} style={menuStyle} onClick={this.handleClick} selectedKeys={[this.state.current!]} mode='horizontal'>
+          <Menu.Item style={menuStyle} key='home1'>
+            <NavLink  to='/'>
+              <img className='logo' src={logo} alt={Config.projectName}/>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item style={menuStyle} key='home'>
             <NavLink  to='/'>
               <Icon type='home' />

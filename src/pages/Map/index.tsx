@@ -15,7 +15,7 @@ import LayerManage from '@components/GISTools/LayerManage'
 import BaseMapSwitcher from '@components/GISTools/BaseMapSwitcher'
 import StationManager from '@components/StationManager'
 import UserMenu from '@components/GISTools/UserMenu'
-
+import MapNavHeader from '@layouts/Header/MapNavHeader'
 interface IState {
   hasMapLoaded?: boolean,
   // toolArr?: ITool[], // 工具条显示配置
@@ -36,7 +36,7 @@ export default class Map extends React.Component<IProps, IState> {
     }
     ControlFooterDisplay(false)
     ControlHeaderDisplay(false)
-    this.testGet()
+    // this.testGet()
   }
 
   testGet = () => {
@@ -142,15 +142,15 @@ export default class Map extends React.Component<IProps, IState> {
   render() {
     const arcGISLayerServiceUrl = Config.baseMapLayers.baseLayers[0].url 
     const mapOption = {
-      center: [108.88071, 34.22455],
-      zoom: 15,
+      center: [116.581548, 35.404373],
+      zoom: 10,
       scaleControl: true
     }
-    let full, zoom, direct, gisToolBar, baseMapSwitcher, stationManager, userMenu
+    let full, zoom, /*direct,*/ gisToolBar, baseMapSwitcher, stationManager, userMenu
     if (this.state.hasMapLoaded!) {
       full = this.renderFull()
       zoom = this.renderZoom()
-      direct = this.renderDirect()
+      // direct = this.renderDirect()
       baseMapSwitcher = this.renderBaseMapSwitcher()
       gisToolBar = this.renderGisToolBar()
       baseMapSwitcher = this.renderBaseMapSwitcher()
@@ -163,10 +163,11 @@ export default class Map extends React.Component<IProps, IState> {
         {gisToolBar}
         {full}
         {zoom}
-        {direct}
+        {/* {direct} */}
         {baseMapSwitcher}
         {stationManager}
         {userMenu}
+        <MapNavHeader classNames='MapNavHeader' />
       </div>
     )
   }

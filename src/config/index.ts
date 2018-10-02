@@ -18,6 +18,7 @@ const Config = {
         image: './img/map.png',
         url: 'http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer'
       },
+      
       {
         id: 'terrain',
         type: 'esri',
@@ -121,7 +122,7 @@ const Config = {
         subgeotype: '',
       }
     ]
-  }
+  },
 }
 
 

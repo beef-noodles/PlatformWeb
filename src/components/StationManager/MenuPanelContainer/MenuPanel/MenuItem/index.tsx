@@ -11,7 +11,7 @@ interface IProps {
   onClick: () => void
 }
 
-export default class BaseToolItem extends React.Component<IProps, any> {
+export default class MenuItem extends React.Component<IProps, any> {
   constructor(props: IProps, stage: any) {
     super(props)
   }
@@ -20,7 +20,6 @@ export default class BaseToolItem extends React.Component<IProps, any> {
     this.props.onClick!()
   }
 
-  // onMouseout= {} onMouseover ={}
   render() {
     return (
       <div className={`${'menuItem ' + this.props.className}`}   onClick={this.clickHandle.bind(this)} >
@@ -28,8 +27,6 @@ export default class BaseToolItem extends React.Component<IProps, any> {
          <img  src={this.props.imgPath ? this.props.imgPath : error}  />
          <div>{this.props.title}</div>
         </div>
-        {/* <img  src={this.props.imgPath ? this.props.imgPath : error}  />
-        <div>{this.props.title}</div> */}
       </div>
     )
   }

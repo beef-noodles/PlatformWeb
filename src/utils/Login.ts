@@ -11,7 +11,8 @@ export default {
   },
   DeleteLoginState: () => {
     return new Promise((resolve, reject) => {
-      window.sessionStorage.removeItem(KEY) ? resolve({ 'isDeleted': true }) : reject({ 'isDeleted': false })
+      window.sessionStorage.removeItem(KEY)
+      resolve({ 'isDeleted': true })
     })
   }
 }

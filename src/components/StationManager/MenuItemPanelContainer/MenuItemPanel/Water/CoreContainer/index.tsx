@@ -3,28 +3,32 @@ import Animate from 'rc-animate'
 import velocity from 'velocity-animate'
 import Config from '@config/index'
 
-import {GetWatf} from '@api/Map'
 
 import Core from './Core'
 interface IState {
   visible ?: boolean
+  data ?: any
 }
 interface IProps {
   visible? : boolean // 控制组件的显隐
   coreCloseAndDetailOpen : (value) => void
   menuItemPanelClose : () => void
+  map?: any // map 对象
+  data ?: any
 }
-export default class MenuPanelContainer extends React.Component<IProps , IState> {
+export default class CoreContainer extends React.Component<IProps , IState> {
   isMount? : boolean
+  map = this.props.map
+  // data = this.props.data
   constructor(props : IProps  , state : IState ) {
     super(props)
     this.state = {
-      visible  : this.props.visible 
+      visible  : this.props.visible ,
+      data : this.props.data
     }
   }
   componentWillMount () {
     this.isMount  = true
-    this.testGet()
   }
   componentWillUnmount () {
     this.isMount  = false
@@ -33,15 +37,18 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
     if (nextProps.visible !== this.props.visible) {
         if (this.isMount ) {
           this.setState( {
-            visible : nextProps.visible
+            visible : nextProps.visible 
           })
         }
     }
+
+    if (nextProps.data !== this.props.data) {
+      if (this.isMount ) {
+        this.setState( {
+          data : nextProps.data
+        })
+      }
   }
-
-
-  testGet = () => {
-    GetWatf().then((data) => {console.log(data)}, err => {console.log(err)})
   }
 
 
@@ -103,7 +110,7 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
     
     return (
       <Animate component='' showProp='visible' animation={anim} >
-          <Core  menuItemPanelClose={this.menuItemPanelClose} coreCloseAndDetailOpen ={this.coreCloseAndDetailOpen.bind(this)} visible= {this.state.visible} />
+          <Core data = {this.state.data} map = {this.map}  menuItemPanelClose={this.menuItemPanelClose} coreCloseAndDetailOpen ={this.coreCloseAndDetailOpen.bind(this)} visible= {this.state.visible} />
       </Animate>
     )
   }

@@ -16,6 +16,7 @@ interface IHistory {
   checked ? : boolean
 }
 interface IProps {
+  map? : any // map 对象
   visible? : boolean // 控制组件的显隐
   moreVisible? : boolean // 控制组件的显隐
   menuArr? : {
@@ -23,26 +24,23 @@ interface IProps {
     more ?: IMenuArr[]
   }
   history ? : IHistory[] 
-  changeCheckboxState : (key , checked) => void
+  changeHistoryState : (flag , key , checked) => void
 }
 interface IState {
   visible ?: boolean
   moreVisible ?: boolean
-  history ? : IHistory[] 
 }
 
 export default class MenuPanelContainer extends React.Component<IProps , IState> {
   isMount? : boolean
+  map = this.props.map
+  history = this.props.history ? this.props.history : []
+  
   constructor(props : IProps  , state : IState ) {
     super(props)
     this.state = {
       visible  : this.props.visible ? this.props.visible : false,
       moreVisible  : this.props.moreVisible ? this.props.moreVisible : false,
-      history : this.props.history !== [] ? this.props.history : [{
-        key : 'error',
-        value : '配置错误',
-        checked : false
-      }]
     }
   }
   componentWillMount () {
@@ -53,19 +51,19 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
   }
 
   componentWillReceiveProps (nextProps : IProps) {
-    // if (nextProps.visible !== this.props.visible) {
-        if (this.isMount ) {
-          this.setState( {
-            visible : nextProps.visible,
-            history : nextProps.history
-          })
-        }
-    // }
+    if (this.isMount ) {
+      this.setState( {
+        visible : nextProps.visible,
+        moreVisible : nextProps.moreVisible
+      })
+    }
   }
 
-  changeCheckboxState = (key , checked) => {
-    this.props.changeCheckboxState(key , checked)
+
+  changeHistoryState = (flag , key , checked) => {
+    this.props.changeHistoryState(flag , key , checked)
   }
+
   animateLeave = (node, done) => {
     let ok = false
     function complete() {
@@ -116,8 +114,8 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
     }
     return (
       <Animate component='' showProp='visible' animation={anim} >
-          <MenuPanel visible= {this.state.visible} moreVisible={this.state.moreVisible}  menuArr= {this.props.menuArr}
-          history = {this.state.history} changeCheckboxState= {this.changeCheckboxState}/>
+          <MenuPanel map={this.map} visible= {this.state.visible} moreVisible={this.state.moreVisible}  menuArr= {this.props.menuArr}
+          history = {this.history} changeHistoryState= {this.changeHistoryState} />
       </Animate>
     )
   }

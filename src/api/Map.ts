@@ -12,18 +12,22 @@ import HttpClient from '@utils/HttpClient'
  * @returns Promise
  */
 const defaultWatfParams = {
-  
-  time_interval: 1,
-  startTime: 100000000,
-  groupField: 'stcd',
-  sumField: 'drp',
-  condition: 'byDay',
-  stcdList: '1001,1002',
+  pageNo: 1, 
+  pageSize: 100
 }
-export function GetWatf(url = `api/watf/pptnGroupSum`, params = defaultWatfParams) {
+export function GetWatf(url = `api/river`, params = defaultWatfParams) {
   return HttpClient.get(url, params)
 }
 
-export default {
-  GetWatf
+const defaultStationParams = {
+  param : ''
 }
+
+export function GetStation(url = `api/station`, params = defaultStationParams) {
+  return HttpClient.get(url, params)
+}
+export default {
+  GetWatf,
+  GetStation
+}
+

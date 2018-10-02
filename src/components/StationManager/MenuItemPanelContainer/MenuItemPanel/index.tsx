@@ -4,6 +4,8 @@ import  './index.less'
 import {Modal} from 'antd'
 
 import Water from './Water'
+import Error from './Error'
+import Rain from './Rain'
 
  interface IState {
   visible? : boolean
@@ -16,19 +18,21 @@ import Water from './Water'
    visible ? : boolean
    currentMenuItem ? : string 
    menuItemPanelClose : () => void
+   map?: any // map 对象
  }
 
 export default class MenuItemPanel extends React.Component <IProps , IState> {
   isMount : boolean
+  map = this.props.map
   constructor (props : IProps, state : IState) {
     super(props)
     this.state = {
       visible :  this.props.visible,
-      currentMenuItem : this.props.currentMenuItem
+      currentMenuItem : this.props.currentMenuItem,
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.isMount  = true
   }
   componentWillUnmount () {
@@ -39,7 +43,7 @@ export default class MenuItemPanel extends React.Component <IProps , IState> {
     if (nextProps.visible !== this.props.visible) {
         if (this.isMount ) {
           this.setState( {
-            visible : nextProps.visible
+            visible : nextProps.visible,
           })
         }
     }
@@ -70,17 +74,15 @@ export default class MenuItemPanel extends React.Component <IProps , IState> {
 
   renderMenuItem = () => {
     let currentRenderMenuItem
-    switch (this.state.currentMenuItem) {
+    switch (this.props.currentMenuItem) {
       case 'water' :
-        currentRenderMenuItem =  <Water visible= {this.state.visible}  menuItemPanelClose = {this.menuItemPanelClose}/>
+        currentRenderMenuItem =  <Water map ={this.map} visible= {this.state.visible}  menuItemPanelClose = {this.menuItemPanelClose}/>
         break
       case 'rain' :
-        // this.info('' , '待实现')
-        // currentRenderMenuItem =  <Water  menuItemPanelClose = {this.menuItemPanelClose}/>
+        currentRenderMenuItem =  <Rain  menuItemPanelClose = {this.menuItemPanelClose}/>
         break
       default :
-        console.log('default')
-        currentRenderMenuItem =  <Water  menuItemPanelClose = {this.menuItemPanelClose}/>
+        currentRenderMenuItem =  <Error menuItemPanelClose = {this.menuItemPanelClose}/>
         break
     }
     return currentRenderMenuItem

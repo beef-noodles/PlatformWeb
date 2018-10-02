@@ -12,41 +12,23 @@ interface IProps {
   visible? : boolean // 控制组件的显隐
   currentMenuItem ? : string
   menuItemPanelClose : () => void
+  map?: any // map 对象
 }
-export default class MenuPanelContainer extends React.Component<IProps , IState> {
+export default class MenuItemPanelContainer extends React.Component<IProps , IState> {
   isMount? : boolean
+  map = this.props.map
   constructor(props : IProps  , state : IState ) {
     super(props)
     this.state = {
-      visible  : this.props.visible ? this.props.visible : false
+      visible  : this.props.visible ? this.props.visible : false,
     }
   }
-  componentWillMount () {
+  componentDidMount () {
     this.isMount  = true
   }
   componentWillUnmount () {
     this.isMount  = false
   }
-
-  componentWillReceiveProps (nextProps : IProps) {
-    if (nextProps.visible !== this.props.visible) {
-        if (this.isMount ) {
-          this.setState( {
-            visible : nextProps.visible,
-            currentMenuItem : this.props.currentMenuItem
-          })
-        }
-    }
-
-    if (nextProps.currentMenuItem !== this.props.currentMenuItem) {
-      if (this.isMount ) {
-        this.setState( {
-          currentMenuItem : nextProps.currentMenuItem
-        })
-      }
-   }
-  }
-
   animateLeave = (node, done) => {
     let ok = false
     function complete() {
@@ -99,7 +81,7 @@ export default class MenuPanelContainer extends React.Component<IProps , IState>
     }
     return (
       <Animate component='' showProp='visible' animation={anim} >
-          <MenuItemPanel menuItemPanelClose = {this.menuItemPanelClose} currentMenuItem = {this.state.currentMenuItem} visible= {this.state.visible}/>
+          <MenuItemPanel map = {this.map}  menuItemPanelClose = {this.menuItemPanelClose} currentMenuItem = {this.props.currentMenuItem} visible= {this.state.visible}/>
       </Animate>
     )
   }
