@@ -1,4 +1,3 @@
-
 const isProduction = process.env.NODE_ENV === 'production'
 const webpack = require('webpack')
 const path = require('path')
@@ -10,17 +9,21 @@ const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 const HappyPack = require('happypack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const {
+  GenerateSW
+} = require('workbox-webpack-plugin')
 // const tsImportPluginFactory = require('ts-import-plugin')
+const publicUrl = '/'
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
-    app: ['babel-polyfill', './src/index.tsx']
+    app: ['@babel/polyfill', './src/index.tsx']
   },
   output: {
-    filename: 'js/[name]_bundle.js',
-    chunkFilename: 'js/[name]_bundle.js',
-    path: path.resolve(__dirname, './build/dist/'),
-    publicPath: '/dist/'
+    filename: 'static/js/[name]_bundle.js',
+    chunkFilename: 'static/js/[name]_bundle.js',
+    path: path.resolve(__dirname, './build/'),
+    publicPath: publicUrl
   },
   devServer: {
     contentBase: path.resolve(__dirname, './public'),
@@ -30,6 +33,7 @@ module.exports = {
     open: true,
     progress: true,
     inline: true,
+    clientLogLevel: 'none',
     historyApiFallback: true,
     noInfo: false,
     overlay: {
@@ -62,8 +66,9 @@ module.exports = {
         target: 'http://36.189.255.196:9101'
       },
       '/api': {
-        // target: 'http://192.168.140.212:8888' // 叶腾
-        target: 'http://192.168.140.133:8080'
+        // target: 'http://192.168.141.106:8888' // 叶腾
+        target: 'http://114.116.18.175:8090' // 运维
+        // target: 'http://192.168.14.133:8080'
       }
     }
   },
@@ -109,74 +114,72 @@ module.exports = {
     }
   },
   module: {
-    rules: [
-      {
-        test: /\.(jsx|tsx|js|ts)$/,
-        loader: 'awesome-typescript-loader',
-        exclude: /node_modules/
-      },
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: [
-          'happypack/loader?id=babel'
-        ]
-      },
-      {
-        test: /\.(le|sa|sc|c)ss$/,
-        use: [
-          'css-hot-loader',
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              // modules: true,
-              localIdentName: '[local]_[hash:base64:6]',
-              minimize: isProduction
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: !isProduction,
-              ident: 'postcss'
-            }
-          },
-          {
-            loader: 'resolve-url-loader'
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true,
-              sourceMap: !isProduction
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
-        use: [{
-          loader: 'url-loader',
+    rules: [{
+      test: /\.(jsx|tsx|js|ts)$/,
+      loader: 'awesome-typescript-loader',
+      exclude: /node_modules/
+    },
+    {
+      enforce: 'pre',
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [
+        'happypack/loader?id=babel'
+      ]
+    },
+    {
+      test: /\.(le|sa|sc|c)ss$/,
+      use: [
+        'css-hot-loader',
+        MiniCssExtractPlugin.loader,
+        {
+          loader: 'css-loader',
           options: {
-            limit: 8192,
-            name: 'images/[hash:6].[ext]',
-            fallback: 'file-loader',
-            publicPath: './dist/'
+            importLoaders: 1,
+            // modules: true,
+            localIdentName: '[local]_[hash:base64:6]',
+            minimize: isProduction
           }
-        }]
-      },
-      {
-        test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
-        use: [{
-          loader: 'file-loader',
+        },
+        {
+          loader: 'postcss-loader',
           options: {
-            name: 'fonts/[hash:6].[ext]'
+            sourceMap: !isProduction,
+            ident: 'postcss'
           }
-        }]
-      }
+        },
+        {
+          loader: 'resolve-url-loader'
+        },
+        {
+          loader: 'less-loader',
+          options: {
+            javascriptEnabled: true,
+            sourceMap: !isProduction
+          }
+        }
+      ]
+    },
+    {
+      test: /\.(png|jpg|gif|svg|ico|cur)(\?[=a-z0-9]+)?$/,
+      use: [{
+        loader: 'url-loader',
+        options: {
+          limit: 8192,
+          name: 'static/images/[hash:6].[ext]',
+          fallback: 'file-loader'
+        }
+      }]
+    },
+    {
+      test: /\.(ttf|eot|otf|woff(2)?)(\?[\s\S]+)?$/,
+      use: [{
+        loader: 'file-loader',
+        options: {
+          name: 'static/fonts/[hash:6].[ext]'
+        }
+      }]
+    }
     ]
   },
   target: 'web',
@@ -193,7 +196,7 @@ module.exports = {
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'style/[name].css'
+      filename: 'static/style/[name].css'
     })
   ].concat(!isProduction ? [
     new webpack.HotModuleReplacementPlugin()
@@ -234,7 +237,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Summit Platform',
       hash: true,
-      filename: '../index.html',
+      filename: './index.html',
       template: './public/template.html',
       favicon: path.resolve(__dirname, 'public/favicon.ico'),
       meta: {
@@ -259,6 +262,30 @@ module.exports = {
       from: './public/config.js',
       to: path.resolve(__dirname, 'build'),
       toType: 'dir'
-    }])
+    }, {
+      from: './public/manifest.json',
+      to: path.resolve(__dirname, 'build'),
+      toType: 'dir'
+    }, {
+      from: './public/icon.png',
+      to: path.resolve(__dirname, 'build'),
+      toType: 'dir'
+    }, {
+      from: './public/favicon.ico',
+      to: path.resolve(__dirname, 'build'),
+      toType: 'dir'
+    }]),
+    new GenerateSW({
+      importWorkboxFrom: 'local',
+      skipWaiting: true,
+      clientsClaim: true,
+      navigateFallbackBlacklist: [
+        // Exclude URLs starting with /_, as they're likely an API call
+        new RegExp('^/_'),
+        // Exclude URLs containing a dot, as they're likely a resource in
+        // public/ and not a SPA route
+        new RegExp('/[^/]+\\.[^/]+$')
+      ]
+    })
   ])
 }

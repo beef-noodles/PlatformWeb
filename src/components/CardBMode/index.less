@@ -1,0 +1,93 @@
+@border-color: #e8e8e8;
+
+.card-b {
+  height: 160px;
+  margin: 8px 8px;
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  cursor: pointer;
+
+  .card-b-header {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    margin: 0 12px;
+    
+    .header-name {
+      width: 80px;
+      color: #262626;
+      display: inline-block;
+      float: left;
+      
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .header-time {
+      display: inline-block;
+      width: 176px;
+      color: #bfbfbf;
+      margin-left: 24px;
+    }
+    
+    .header-status {
+      width: 52px;
+      color: #52c41a;
+      display: inline-block;
+      float: right;
+    }
+  }
+  
+  .card-b-content {
+    height: 119px;
+    border-top: 1px solid #e8e8e8;
+    text-align: right;
+    
+    .card-b-num {
+      font-size: 20px;
+      color: #262626;
+      font-weight: bold;
+    }
+    
+    .card-b-desc {
+      font-size: 14px;
+      color: #bfbfbf;
+    }
+    
+    .water-level {
+      display: inline-block;
+      width: 90px;
+      height: 118px;
+      border-right: 1px solid #e8e8e8;
+      padding-right: 8px;
+      padding-top: 20px;
+    }
+    
+    .warn-water-level {
+      display: inline-block;
+      width: 90px;
+      height: 118px;
+      border-right: 1px solid #e8e8e8;
+      padding-right: 8px;
+      padding-top: 20px;
+    }
+    
+    .guaranteed-water-level {
+      display: inline-block;
+      width: 91px;
+      height: 118px;
+      padding-right: 8px;
+      padding-top: 20px;
+    }
+    
+    .flow {
+      display: inline-block;
+      width: 90px;
+      height: 118px;
+      border-right: 1px solid #e8e8e8;
+      padding-right: 8px;
+      padding-top: 20px;
+    }
+  }
+}

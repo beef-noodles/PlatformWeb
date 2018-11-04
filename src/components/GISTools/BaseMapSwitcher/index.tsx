@@ -3,27 +3,19 @@ import { TileLayer, SpatialReference } from 'maptalks'
 import './index.less'
 import Config from '@config/index'
 import classnames from 'classnames'
-// interface ILayer {
-//   layerUrl: string,
-//   layerId: string,
-// }
 
-// interface ITool {
-//   imgPath: string,
-//   tips: string,
-//   placement: string,
-//   layer: ILayer,
-//   handler: (...args) => void
-// }
 interface IProps {
-  map: any, // 地图实例
+  /**
+   * map对象
+   */
+  map: any,
 }
 
 interface IState {
   hasSelectedId?: string, // 选中的底图的Id
 }
 
-class BaseMapSwitcher extends React.Component<IProps, IState> {
+export default class BaseMapSwitcher extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -36,7 +28,7 @@ class BaseMapSwitcher extends React.Component<IProps, IState> {
       hasSelectedId: baseLayerInfo.id
     }, () => {
       const arcUrl = baseLayerInfo.url
-      SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err, conf) => {
+      SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err) => {
         if (err) {
           throw new Error(err)
         }
@@ -50,7 +42,7 @@ class BaseMapSwitcher extends React.Component<IProps, IState> {
         this.props.map.setBaseLayer(newBaseLayer)
       })
     })
-    
+
   }
 
   render() {
@@ -61,19 +53,24 @@ class BaseMapSwitcher extends React.Component<IProps, IState> {
             let baseLayer
             switch (item.id) {
               case 'image':
-                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/image.png')}) no-repeat 0 0`, zIndex: key }}>
-                  <span className='label' >{item.title}</span>
+                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/image.jpg')}) no-repeat 0 0`, zIndex: key }}>
+                  <div className='mask'>
+                    <span className='label' >{item.title}</span>
+                  </div>
                 </div>
                 break
               case 'map':
-                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/map.png')}) no-repeat 0 0`, zIndex: key }}>
-                  <span className='label' >{item.title}</span>
+                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/map.jpg')}) no-repeat 0 0`, zIndex: key }}>
+                  <div className='mask'>
+                    <span className='label' >{item.title}</span>
+                  </div>
                 </div>
                 break
               default:
-                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/terrain.png')}) no-repeat 0 0`, zIndex: key }}>
-                  <span className='label' >{item.title}</span>
-                </div>
+                baseLayer = <div key={key} onClick={this.handleBaseMapSwitch.bind(this, item)} className={classnames('baseMapItem', { 'hasSelectedItem': item.id === this.state.hasSelectedId })} style={{ 'background': `url(${require('./img/terrain.jpg')}) no-repeat 0 0`, zIndex: key }}>
+                  <div className='mask'>
+                    <span className='label' >{item.title}</span>
+                  </div>                </div>
                 break
             }
             return baseLayer
@@ -83,5 +80,3 @@ class BaseMapSwitcher extends React.Component<IProps, IState> {
     )
   }
 }
-
-export default BaseMapSwitcher

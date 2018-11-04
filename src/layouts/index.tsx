@@ -20,7 +20,7 @@ export const IsDisplayFooterTopic = '04daba51-b06a-4f01-b180-0a72292dddbf'
 
 
 export default class Layouts extends React.Component<IProps, IState> {
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       isDisplayHeader: true,
@@ -41,15 +41,21 @@ export default class Layouts extends React.Component<IProps, IState> {
   }
   componentDidMount() {
     PubSub.subscribe(IsDisplayFooterTopic, (message, data) => {
+      console.log(message)
       this.setState({
         isDisplayFooter: data
       })
     })
     PubSub.subscribe(IsDisplayHeaderTopic, (message, data) => {
+      console.log(message)
       this.setState({
         isDisplayHeader: data
       })
     })
+  }
+  componentWillUnmount() {
+    PubSub.unsubscribe(IsDisplayFooterTopic)
+    PubSub.unsubscribe(IsDisplayHeaderTopic)
   }
   render() {
     return (

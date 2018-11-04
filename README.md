@@ -2,6 +2,10 @@
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![Storybook](http://github.com/storybooks/press/blob/master/badges/storybook.svg)](https://andorlab.summit.com)
+
+
 ## Node版本
 
 |序号|名称|说明|
@@ -63,11 +67,16 @@ import AjaxTest from '@components/Ajax'
 ## 新特性
 
 **[react-draggable](https://www.npmjs.com/package/react-draggable)**: 可拖动的React容器组件
+
 **[classnames](https://www.npmjs.com/package/classnames)**: 方便在组件中控制样式, 使用[1](https://www.cnblogs.com/kugeliu/p/7339160.html), [2](https://www.npmjs.com/package/classnames)
+
+测试框架使用[jest](https://jestjs.io/zh-Hans/)和axios模拟框架[axios-mock-adapter](https://www.npmjs.com/package/axios-mock-adapter),　示例地址为./src/__test__/utils/HttpClient.spec.ts
+
+案例使用[storybook](https://storybook.js.org/)来呈现，编写规则为参考 **Demo**, 辅助类库为[@storybook/addon-knobs/react](https://www.npmjs.com/package/@kadira/storybook-addon-knobs),可以进行数据交互
 
 ## 支持环境
 
-* IE>=11
+* IE>9
 * Edge>=15
 * Chrome>=57
 * FireFox>=55

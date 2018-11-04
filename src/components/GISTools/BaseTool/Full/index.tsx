@@ -3,32 +3,45 @@ import * as React from 'react'
 import { message } from 'antd'
 
 import './index.less'
-import BaseToolItem from '@components/GISTools/BaseTool/BaseToolItem'
+import BaseToolItem from '../BaseToolItem'
 import full from './img/full.png'
 
 interface IProps  {
-  className?: string, // 样式
-  map: any, // 地图实例
-  imgPath ?: string,
+  
+  map: any, 
+  /**
+   * 样式
+   */
+  className ?: string,
+  /**
+   * 提示气泡显示内容
+   */
   tips ?: string,
+  /**
+   * 提示气泡位置控制
+   */
   placement ?: string,
+  /**
+   * 点击事件
+   */
   handler?: () => void,
 }
 
 interface IState {
-  imgPath?: string,
+  // imgPath?: string,
+  className: string,
   tips?: string,
   placement ?: string
 }
 
-class Full extends React.Component<IProps, IState> {
+export default class Full extends React.Component<IProps, IState> {
   map = this.props.map
   defaultCenter: any // 记录地图显示的默认中心点
   defaultZoom: any // 记录地图显示的默认zoom值
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
-        imgPath: this.props.imgPath ? this.props.imgPath : full,
+        className: this.props.className ? this.props.className : full,
         tips: this.props.tips ? this.props.tips : '全图',
         placement: this.props.placement ? this.props.placement : 'left'
     }
@@ -62,9 +75,10 @@ class Full extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <BaseToolItem imgPath={this.state.imgPath!} tips={this.state.tips!} onClick={this.fullExtentHandle.bind(this)} placement={this.state.placement} />
+      <div  className='_gisBaseTools'>
+        <BaseToolItem className='fullBackgroundInit' tips={this.state.tips!}   onClick={this.fullExtentHandle.bind(this)} placement={this.state.placement} /> 
+      </div>
+
     )
   }
 }
-
-export default Full

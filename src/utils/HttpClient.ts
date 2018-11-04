@@ -1,5 +1,7 @@
 
 import axios from 'axios'
+import { loadProgressBar } from 'axios-progress-bar'
+import 'axios-progress-bar/dist/nprogress.css'
 import * as Login from '@utils/Login'
 // 自定义判断元素类型JS
 function toType(obj) {
@@ -34,11 +36,11 @@ function apiAxios(method, url, params) {
     params = filterNull(params)
   }
   return new Promise((resolve, reject) => {
-    
     if (!Login.default.GetLoginState()) {
       // window.location.href = './index.html'
     }
-    axios.defaults.headers.common.Authorization = 'AUTH_TOKEN'
+    loadProgressBar()
+    // axios.defaults.headers.common.Authorization = 'AUTH_TOKEN'
     axios({
       method,
       url,
@@ -49,19 +51,21 @@ function apiAxios(method, url, params) {
       .then((res) => {
         if (res.status === 200) {
           const data = res.data
-          if (data.success) {
-            resolve(data.data)
+          if (data.code === 'HOMS-0000') {
+            data.data ? resolve(data.data) : resolve(true)
           } else {
-            reject('Axios成功，但后台处理错误，赶紧看看后台去')
+            console.error('服务器状态不对', data)
+            reject({error: data})
           }
         } else {
+          console.log('Axios返回状态不对，查看请求处理过程．．．．')
           reject('Axios返回状态不对，查看请求处理过程．．．．')
         }
       }, err => {
         reject(err)
       })
       .catch((err) => {
-        const errInfo = {'err': err.response}
+        const errInfo = { 'err': err.response }
         reject(errInfo)
       })
   })

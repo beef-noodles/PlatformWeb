@@ -10,7 +10,7 @@ export default {
     return window.sessionStorage.getItem(KEY)
   },
   DeleteLoginState: () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       window.sessionStorage.removeItem(KEY)
       resolve({ 'isDeleted': true })
     })

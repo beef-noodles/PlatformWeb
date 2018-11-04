@@ -1,0 +1,18 @@
+@import '../../theme/theme.less';
+
+@widget-value-font-color: #262626; // 有值颜色
+@widget-no-value-font-color: #bdbdbd;　// 无值颜色
+.submitInfoContainer{
+  display: inline-block;
+  .submitInput{
+    margin-left: 2 * @margin;
+  }
+  .no-value {
+    color: @widget-no-value-font-color;
+    vertical-align: middle;
+    .supplement{
+      color: @primary-color;
+      cursor: pointer;
+    }
+  }
+}

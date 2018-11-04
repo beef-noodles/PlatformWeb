@@ -8,7 +8,7 @@ interface IState {
   component: React.Component| null
 }
 class DynamicImport extends Component<IProps, IState> {
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       component: null

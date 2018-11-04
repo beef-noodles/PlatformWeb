@@ -6,7 +6,7 @@ module.exports = {
     }),
     require('postcss-easy-import')({
       prefix: '_',
-      extensions: ['pcss', 'css']
+      extensions: ['less', 'css']
     }),
     // 处理css前缀
     require('autoprefixer')({

@@ -4,7 +4,8 @@ import velocity from 'velocity-animate'
 import LayerTree from './LayerTree'
 import './index.less'
 import Config from '@config/index'
-import BaseToolItemNoneTip from '@components/GISTools/BaseTool/BaseToolItemNoneTip'
+// import BaseToolItemNoneTip from '@components/GISTools/BaseTool/BaseToolItemNoneTip'
+import LayerManageItem from '@components/GISTools/LayerManage/LayerManageItem'
 
 interface INode {
   title?: string // 节点名称
@@ -18,25 +19,65 @@ interface INode {
   subgeotype?: string // 是动态服务的数据节点还是逻辑节点
 }
 interface IProps {
-  map?: any
+  /**
+   * map对象
+   */
+  map : any
+  /**
+   * 样式名称
+   */
   className?: string
-  // visible?: boolean
+  /**
+   * 图层控制的显示隐藏控制
+   */
+  visible : boolean
+  onClick : () => void
 }
 
 interface IState {
   data?: INode[]
   visible?: boolean
+  className: string
 }
 
 
 export default class LayerManager extends React.Component<IProps, IState> {
   tree: any
+  isMount = false
+  map = this.props.map
   constructor(props: IProps) {
     super(props)
     this.state = {
-      visible: false,
-      data: Config.LayerManager.layerArray
+      visible: this.props.visible ? this.props.visible : false,
+      data: Config.LayerManager.layerArray,
+      className: '_layerManagerImgUp'
     }
+  }
+
+  componentDidMount () {
+    this.isMount = true
+    this.map.on('click', () => {
+      if (this.state.visible === true && this.isMount === true) {
+        this.setState({
+          visible: false,
+        })
+      }
+    })
+  }
+
+  componentWillReceiveProps(nextProps: IProps) {
+    if (nextProps.visible !== this.props.visible) {
+      this.setState({
+        visible: nextProps.visible
+      })
+    }
+  }
+
+
+  componentWillUnmount() {
+    this.setState({
+      visible: false
+    })
   }
 
 
@@ -81,15 +122,13 @@ export default class LayerManager extends React.Component<IProps, IState> {
     }
   }
   handleLayer = () => {
+    this.props.onClick()
     this.setState({
-      visible: !this.state.visible
+      visible: !this.state.visible ,
+      className: this.state.className === '_layerManagerImgUp' ? '_layerManagerImgDown' : '_layerManagerImgUp'
     })
   }
-  componentWillUnmount() {
-    this.setState({
-      visible: false
-    })
-  }
+
 
   render() {
     const anim = {
@@ -98,9 +137,10 @@ export default class LayerManager extends React.Component<IProps, IState> {
     }
     return (
       <div className={`_layerManager`}>
-        <BaseToolItemNoneTip imgPath={require<string>('./img/layerContral_off.png')} title='图层控制' onClick={this.handleLayer.bind(this)} />
-          <Animate className='layerTree' component='' showProp='visible' animation={anim}>
-            <LayerTree visible={this.state.visible} className='' map={this.props.map} data={this.state.data} />
+        {/* <BaseToolItemNoneTip className={this.state.className} title='图层控制' onClick={this.handleLayer.bind(this)} /> */}
+      <LayerManageItem className={this.state.className} icon ='_layerManagerImgIcon' title='图层控制' onClick={this.handleLayer.bind(this)} />
+      <Animate  component='' showProp='visible' animation={anim}>
+            <LayerTree visible={this.state.visible} className='_layerTree' map={this.props.map} data={this.state.data} />
           </Animate>
       </div>
     )

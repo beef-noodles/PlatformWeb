@@ -1,4 +1,5 @@
 {
+  "autoFixOnSave": true,
   "extends": ["tslint:recommended", "tslint:latest", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
     "exclude": [
@@ -20,6 +21,7 @@
     "no-bitwise": true,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
+    "triple-equals": true,
     "no-console": false,
     "ordered-imports": false,
     "no-submodule-imports": false,
@@ -49,7 +51,7 @@
     "jsx-no-lambda": false,
     "no-this-assignment": false,
     "prefer-conditional-expression": false,
-    "no-implicit-dependencies": ["optional", ["src"]],
+    "no-implicit-dependencies": false,
     "jsx-no-bind": false,
     "one-variable-per-declaration": false,
     "no-empty-interface": false

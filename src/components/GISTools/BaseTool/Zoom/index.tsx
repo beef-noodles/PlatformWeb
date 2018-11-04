@@ -3,20 +3,29 @@ import * as React from 'react'
 import { message } from 'antd'
 
 import './index.less'
-import BaseToolItem from '@components/GISTools/BaseTool/BaseToolItem'
-import zoomOut from './img/zoomOut.png'
-import zoomIn from './img/zoomIn.png'
+import BaseToolItem from '../BaseToolItem'
+// import zoomOut from './img/zoomOut.png'
+// import zoomIn from './img/zoomIn.png'
 
 interface ITool {
-  imgPath: string,
+  className: string,
   tips: string,
   placement: string,
   handler: () => void
 }
 interface IProps {
-  className?: string, // 样式
+  /**
+   * 样式
+   */
+  className?: string, 
+  /**
+   * map对象
+   */
   map: any, // 地图实例
-  orientation?: 'row' | 'row-reverse' | 'column' | 'column-reverse', // 工具条的方向， 默认水平
+  /**
+   * 工具条的方向， 默认水平
+   */
+  orientation?: 'row' | 'row-reverse' | 'column' | 'column-reverse',
 }
 
 interface IState {
@@ -24,35 +33,35 @@ interface IState {
   toolArr?: ITool[], // 工具条工具集合
 }
 
-class Zoom extends React.Component<IProps, IState> {
+export default class Zoom extends React.Component<IProps, IState> {
   map = this.props.map
-  minZoom : any // 记录最小缩放级别
-  maxZoom : any // 记录最大缩放级别
-  constructor(props: IProps, state: IState) {
+  minZoom: any // 记录最小缩放级别
+  maxZoom: any // 记录最大缩放级别
+  constructor(props: IProps) {
     super(props)
-    this.state = {      
+    this.state = {
       orientation: this.props.orientation ? this.props.orientation : 'row',
       toolArr: [
-      {
-        imgPath: zoomIn,
-        tips: '放大',
-        handler: this.zoomInHandle,
-        placement: 'left'
-      },
-      {
-        imgPath: zoomOut,
-        tips: '缩小',
-        handler: this.zoomOutHandle,
-        placement: 'left'
-      }
-    ]
+        {
+          className: 'zoomInInit',
+          tips: '放大',
+          handler: this.zoomInHandle,
+          placement: 'left'
+        },
+        {
+          className: 'zoomOutInit',
+          tips: '缩小',
+          handler: this.zoomOutHandle,
+          placement: 'left'
+        }
+      ],
     }
   }
   componentDidMount() {
     this.maxZoom = this.map.getMaxZoom() // 获取最大zoom值
     this.minZoom = this.map.getMinZoom() // 获取最小zoom值
   }
-  
+
   /**
    * 全局警告
    * 
@@ -96,23 +105,21 @@ class Zoom extends React.Component<IProps, IState> {
    * @memberof GISTools
    */
   renderToolBar = () => {
-    return (      
+    return (
       this.state.toolArr!.map((item, key) => {
-        return (                 
-            <BaseToolItem key={key}  imgPath={item.imgPath} tips={item.tips} onClick={item.handler.bind(this)} placement={item.placement}/>                         
+        return (
+          <BaseToolItem className={item.className} key={key} tips={item.tips} onClick={item.handler.bind(this)} placement={item.placement} />
         )
       })
-      
+
     )
   }
   render() {
     const toolbar = this.renderToolBar()
     return (
-        <div style={{ flexDirection: this.state.orientation }} className={`${'_gisBaseTools ' + (this.props.className ? this.props.className : '')}`}>
-          {toolbar}
-        </div>
+      <div style={{ flexDirection: this.state.orientation }} className={`${'_gisBaseTools ' + (this.props.className ? this.props.className : '')}`}>
+        {toolbar}
+      </div>
     )
   }
 }
-
-export default Zoom

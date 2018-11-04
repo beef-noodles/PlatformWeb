@@ -12,38 +12,69 @@
   overflow: hidden;
 }
 
+.scaleControl{
+  bottom: 80px;
+}
 
 // gis工具条
 .gisToolBar {
   position: fixed;
-  top: @margin-top;
-  margin: 0 5px;
-  right: 160px;
-  border-radius: @theme-border-radius;
+  top: @margin;
+  right: @margin;
+  // border-radius: @theme-border-radius @theme-border-radius @theme-border-radius 0px;
+  // border-radius: @theme-border-radius;
   background-color: @theme-app-background-color;
   box-shadow: @box-shadow-base;
+  padding: 10px 0px!important; // 该padding与DraggableContainer中的padding冲突
+  .strong-inlineBlock{
+    display:inline-block;
+    width:5px;
+    height: 30px;
+    // cursor: move;
+    color: @theme-app-background-color;
+  }
+}
+.layerContainerVisible{
+  border-radius: @theme-border-radius @theme-border-radius @theme-border-radius 0px;
+}
+.layerContainerUnVisible{
+  border-radius: @theme-border-radius;
 }
 // gis功能按钮-全图
 .fullContainer {
+  border-radius: 8px;
   position: fixed;
-  bottom: 230px;
-  right: @margin-right;
+  bottom: 25*@margin;
+  right: @margin;
   display: inline-block;
   background-color: @theme-app-background-color;
-  border-radius: @theme-border-radius;
   box-shadow: @box-shadow-base;
 }
 
-// gis功能按钮-全图
-.zoomContainer {
+
+/* gis功能按钮-放大*/
+.zoomInContainer {
+  border-radius: 8px;
   position: fixed;
-  bottom: 155px;
-  right: @margin-right;
+  bottom: 18*@margin;;
+  right: @margin;
   display: inline-block;
   background-color: @theme-app-background-color;
-  border-radius: @theme-border-radius;
+  // border-radius: @theme-border-radius;
   box-shadow: @box-shadow-base;
 }
+/* gis功能按钮-缩小*/
+.zoomOutContainer {
+  border-radius: 8px;
+  position: fixed;
+  bottom: 11*@margin;
+  right: @margin;
+  display: inline-block;
+  background-color: @theme-app-background-color;
+  // border-radius: @theme-border-radius;
+  box-shadow: @box-shadow-base;
+}
+
 
 .mapDirectTool {
   position: fixed;
@@ -64,7 +95,7 @@
 .layerWindow {
   position: fixed;
   top: 60px;
-  right: @margin-right;
+  right: @margin;
 }
 .userMenu {
   position:absolute;
@@ -74,7 +105,7 @@
 
 .MapNavHeader{
   position: absolute;
-  top: @margin-top + 5px;
-  right: @margin-right + 100px;
+  top: @margin+ 5px;
+  right: @margin + 100px;
 }
 

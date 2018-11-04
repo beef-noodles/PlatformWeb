@@ -3,20 +3,30 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name='author' content="谷中仁">
+  <meta name='description' content="Summit Web">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122329315-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'UA-122329315-1');
-  </script>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000"/>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="shortcut icon" href="./favicon.ico">
   <script src='./config.js'></script>
-
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('./service-worker.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful with scope: ',
+            registration.scope
+          )
+        })
+        .catch(err => {
+          console.log('ServiceWorker registration failed: ', err)
+        })
+    }
+  </script>
   <title>
     <%= htmlWebpackPlugin.options.title %>
   </title>

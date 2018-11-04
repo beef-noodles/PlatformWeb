@@ -1,0 +1,67 @@
+@import '../../../../theme/theme.less';
+@widget-value-font-color: #262626; // 有值颜色
+@widget-no-value-font-color: #bdbdbd;　// 无值颜色
+.widgetContainer {
+  padding: 2 * @margin 4* @margin  0 4* @margin;
+  .widgetTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: @widget-value-font-color;
+  }
+  .subtitle{
+    text-align: left;
+    font-size: 14px;
+  }
+  .content{
+    padding-bottom: 5 * @margin;
+    .contentItem{
+      line-height: 5 * @margin;
+      .key{
+        display: inline-block;
+        color: @widget-no-value-font-color;
+        text-align: right;
+        font-size: 14px;
+        width: 8 * @margin;
+      }
+      .value{ // 正常值
+        display:inline-block;
+        // color: @widget-value-font-color;
+        text-align: left;
+        margin-left: 2 * @margin;
+       max-width: 248px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+      }
+      .no-value {
+        color: @widget-no-value-font-color;
+        margin-left: 2 * @margin;
+        vertical-align: middle;
+        .supplement{
+          color: @primary-color;
+          cursor: pointer;
+        }
+      }
+      .image-key{
+        display: inline-block;
+        color: @widget-no-value-font-color;
+        text-align: right;
+        font-size: 14px;
+        width: 8 * @margin;
+        vertical-align: top;
+      }
+      .image-value{
+        margin-left: 2 * @margin;
+        background-color: @widget-no-value-font-color;
+        img {
+          vertical-align: text-top;
+          width: 240px;
+          height: 160px;
+        }
+      }
+    }
+    
+
+  }
+}

@@ -1,0 +1,81 @@
+.panel {
+  width: 416px;
+  background-color: white;
+
+  div[aria-expanded="true"]{
+    .panel-header{
+      background-color: #e6f7ff;
+      box-shadow: -12px 0 0 0 #1890ff inset;
+
+      .panel-icon,.panel-text{
+        color: #1890ff;
+      }
+      .panel-del{
+        visibility: visible;
+      }
+    }
+  }
+  
+  .panel-header {
+    height: 40px;
+    background-color: white;
+    margin: 4px 0;
+    border-top: 1px dashed #e8e8e8;
+    padding: 0 24px;
+    position: relative;
+
+    .panel-icon {
+      width: 32px;
+      height: 40px;
+      display: inline-block;
+      position: absolute;
+      top: 9px;
+    }
+
+    .panel-text {
+      font-size: 14px;
+      line-height: 40px;
+      color: #262626;
+      display: inline-block;
+      position: absolute;
+      left: 56px;
+    }
+
+    .panel-del {
+      width: 32px;
+      height: 40px;
+      display: inline-block;
+      position: absolute;
+      top: 9px;
+      right: 0px;
+      visibility: hidden;
+      color: #1890ff;
+    }
+
+    &:hover {
+      .panel-icon,.panel-text{
+        color: #1890ff;
+      }
+      .panel-del{
+        visibility: visible;
+      }
+    }
+
+  }
+
+  .ant-collapse-header{
+    background-color: white;// #e6f7ff;
+    box-shadow: -4px 0 0 0 #1890ff inset;
+    color: #1890ff;
+    margin: 4px 0;
+    padding: 0 24px;
+  }
+
+  .ant-collapse-item{
+    border: 0px;
+  }
+}
+
+.ant-collapse>.ant-collapse-item.ant-collapse-no-arrow>.ant-collapse-header{
+  padding: 0;
+}

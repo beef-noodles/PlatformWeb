@@ -17,7 +17,7 @@ export interface IProps {
   // style?: any
 }
 export default class NavBar extends React.Component<IProps, IState> {
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       current: 'home'
@@ -58,18 +58,19 @@ export default class NavBar extends React.Component<IProps, IState> {
               <Icon type='appstore-o'/>
               Demo示例
             </NavLink>
+          </Menu.Item> 
+          <Menu.Item  style={menuStyle} key='22' >
+            <NavLink to='/routerTest'>
+            <Icon type='smile-o' />
+              嵌套路由
+            </NavLink>
           </Menu.Item>
           <Menu.Item style={menuStyle} key='11'>
             <NavLink  to='/test'>
               <Icon type='smile-o' />
-              no match
+              404
             </NavLink>
           </Menu.Item>
-
-          <Menu.Item  style={menuStyle} key='22' disabled>
-            <Icon type='appstore' />Navigation Two
-          </Menu.Item>
-
           <SubMenu style={menuStyle} title={<span><Icon type='setting' />Navigation Three - Submenu</span>}>
             <Menu.Item  key='33'>Option 1</Menu.Item>
             <Menu.Item  key='44'>Option 2</Menu.Item>

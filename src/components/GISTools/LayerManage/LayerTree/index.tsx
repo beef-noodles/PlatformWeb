@@ -27,9 +27,21 @@ interface INode {
 }
 
 interface IProps {
-  map?: any
+  /**
+   * map对象
+   */
+  map: any
+  /**
+   * 图层控制数据源
+   */
   data? : INode[]
+  /**
+   * 样式名
+   */
   className ?: string
+  /**
+   * 图层控制面板是否显示
+   */
   visible ?: boolean
 }
 
@@ -53,7 +65,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
 
   currentCheckedKeys = []
   lastCheckedKeys = []
-  constructor (props : IProps, state : IState) {
+  constructor (props : IProps) {
     super(props)
     this.state = {
       expandedKeys: ['2'],
@@ -65,6 +77,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
   
   componentWillMount () {
     this.treeData =  this.createTreeData(this.initData)
+    // this.treeData =  this.createTreeData(this.props.data)
   }
 
   componentWillReceiveProps(nextProps: IProps) {
@@ -84,7 +97,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
    * 节点展开时触发事件
    * 树节点展开时将展开节点的key值保存在全局变量expandedKeys中，用于资源目录状态保持
    */
-  onExpand = (expandedKeys, e) => {
+  onExpand = (expandedKeys) => {
     this.setState({
       expandedKeys,
       // autoExpandParent: false,
@@ -138,7 +151,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
     } else {
       // 如果不是叶子节点，则获取其子节点
       const children = e.node.getNodeChildren()
-      children.map((item, index) => {
+      children.map((item) => {
         const childrenKey = item.key // 子节点的key值
         const childrenProps = item.props 
         if (childrenProps.children && childrenProps.children.length !== 0) { // 判断子节点的子节点是否存在，应该写一个递归来找该当前点击节点的子节点
@@ -184,7 +197,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
     } else {
       // 如果不是叶子节点，则获取其子节点
       const children = e.node.getNodeChildren()
-      children.map((item, index) => {
+      children.map((item) => {
         const childrenProps = item.props 
         if (childrenProps.children ) { // 判断子节点的子节点是否存在，应该写一个递归来找该当前点击节点的子节点\
           console.log()
@@ -247,6 +260,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
     */
    createTreeData(data) {
     // const tree = [] 
+    // console.log(data)
     this.treeData = [] 
     
     if (data.length > 0) {
@@ -264,7 +278,7 @@ export default class LayerTree extends React.Component <IProps , IState > {
             subgeotype: n.subgeotype,
           }
           this.treeData.push( obj )
-          this.deleteArrayItemByValue(data, n) // 从数组中删除元素 n
+          // this.deleteArrayItemByValue(data, n) // 从数组中删除元素 n
         }
       }
       // tree 根节点，resData只有当前没有遍历到的节点
@@ -321,7 +335,8 @@ export default class LayerTree extends React.Component <IProps , IState > {
    * 生成资源目录UI效果
    */
   renderTreeNodes = (data) => {
-    return data.map((item) => {
+    const currentOpData = data
+    return currentOpData.map((item) => {
       if (item.children) {
         return (
           // dataRef={item}
@@ -336,8 +351,12 @@ export default class LayerTree extends React.Component <IProps , IState > {
     })
   }
 
+  onSelect = (e) => {
+    console.log(e)
+  }
+
   render () {
-    const style = classnames('unVisibleTreeContainer', {'visibleTreeContainer': this.state.visible})
+    const style = classnames(`unVisibleTreeContainer ${this.props.className}`, {'visibleTreeContainer': this.state.visible})
     return (
       // <Tree checkable 
       // onExpand={this.onExpand} 
@@ -353,13 +372,14 @@ export default class LayerTree extends React.Component <IProps , IState > {
 
 
       <div className={style}>
-         <Tree checkable 
+         <Tree 
+         checkable 
           onExpand={this.onExpand} 
           expandedKeys={this.state.expandedKeys} 
          // autoExpandParent={this.state.autoExpandParent}
           onCheck={this.onCheck}
           checkedKeys={this.state.checkedKeys}
-          // onSelect={this.onSelect}
+          onSelect={this.onSelect}
           // selectedKeys={this.state.selectedKeys}
           >
             {this.renderTreeNodes(this.treeData)}

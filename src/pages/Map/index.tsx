@@ -3,19 +3,20 @@ import * as React from 'react'
 import MaptalksCom from '@components/mapComponents/MaptalksCom'
 import './index.less'
 import Config from '@config/index'
-import DirectTool from '@components/GISTools/MapDirectTool'
+// import DirectTool from '@components/GISTools/MapDirectTool'
 import Full from '@components/GISTools/BaseTool/Full'
-import Zoom from '@components/GISTools/BaseTool/Zoom'
+// import Zoom from '@components/GISTools/BaseTool/Zoom'
+import ZoomIn from '@components/GISTools/BaseTool/ZoomIn'
+import ZoomOut from '@components/GISTools/BaseTool/ZoomOut'
 import { ControlFooterDisplay, ControlHeaderDisplay } from '@pages/PageUtils'
 import DraggableContainer from '@components/DraggableContainer'
 import MeasureTool from '@components/GISTools/BaseTool/MeasureTool'
-import {GetWatf} from '@api/Map'
 import LayerManage from '@components/GISTools/LayerManage'
 
 import BaseMapSwitcher from '@components/GISTools/BaseMapSwitcher'
 import StationManager from '@components/StationManager'
-import UserMenu from '@components/GISTools/UserMenu'
-import MapNavHeader from '@layouts/Header/MapNavHeader'
+// import UserMenu from '@components/GISTools/UserMenu'
+// import MapNavHeader from '@layouts/Header/MapNavHeader'
 interface IState {
   hasMapLoaded?: boolean,
   // toolArr?: ITool[], // 工具条显示配置
@@ -28,7 +29,7 @@ interface IProps {
 
 export default class Map extends React.Component<IProps, IState> {
   map: any
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
       hasMapLoaded: false,
@@ -36,18 +37,13 @@ export default class Map extends React.Component<IProps, IState> {
     }
     ControlFooterDisplay(false)
     ControlHeaderDisplay(false)
-    // this.testGet()
   }
 
-  testGet = () => {
-    GetWatf().then((data) => {console.log(data)}, err => {console.log(err)})
-  }
-
-  renderUserMenu = () => {
-    return (
-      <UserMenu className='userMenu'/>
-    )
-  }
+  // renderUserMenu = () => {
+  //   return (
+  //     <UserMenu className='userMenu' />
+  //   )
+  // }
   /**
    * 底图切换功能
    *
@@ -62,21 +58,21 @@ export default class Map extends React.Component<IProps, IState> {
   /**
    * 切换图层控制窗口的显示与关闭
    */
-  LayerContainerToggle = () => {
-    this.setState({
-      layerContainerVisible: !this.state.layerContainerVisible
-    })
-  }
+  // LayerContainerToggle = () => {
+  //   this.setState({
+  //     layerContainerVisible: !this.state.layerContainerVisible
+  //   })
+  // }
   /**
    * 渲染direct
    *
    * @memberof Map
    */
-  renderDirect = () => {
-    return (
-      <DirectTool className='mapDirectTool'  map={this.map} />
-    )
-  }
+  // renderDirect = () => {
+  //   return (
+  //     <DirectTool className='mapDirectTool' map={this.map} />
+  //   )
+  // }
   /**
    * 渲染全屏
    *
@@ -85,36 +81,58 @@ export default class Map extends React.Component<IProps, IState> {
   renderFull = () => {
     return (
       <div className='fullContainer'>
-        <Full map={this.map} className='' />
+        <Full map={this.map} />
       </div>
     )
   }
 
   /**
-   * 渲染放大缩小按钮
+   * 渲染放大按钮
    *
    * @memberof Map
    */
-  renderZoom = () => {
+  renderZoomIn = () => {
     return (
-      <div className='zoomContainer'>
-        <Zoom map={this.map} className='' orientation='column'/>
+      <div className='zoomInContainer'>
+        <ZoomIn map={this.map} className=''  orientation='column' />
       </div>
     )
+  }
+
+  
+  /**
+   * 渲染缩小按钮
+   *
+   * @memberof Map
+   */
+  renderZoomOut = () => {
+    return (
+      <div className='zoomOutContainer'>
+        <ZoomOut map={this.map} className=''  orientation='column' />
+      </div>
+    )
+  }
+  layerContainerVisibleToggle = () => {
+    this.setState({
+      layerContainerVisible : !this.state.layerContainerVisible
+    })
   }
 
   /**
    * 渲染gis工具条
    */
   renderGisToolBar = () => {
+    const className = this.state.layerContainerVisible === true ? 'layerContainerVisible' : 'layerContainerUnVisible' 
     return (
-      <DraggableContainer className='gisToolBar'>
-      {/* <div className='gisToolBar'> */}
+      <DraggableContainer className={'gisToolBar ' + className} >
+      <strong className='strong-inlineBlock'/>
+        {/* <div className='gisToolBar'> */}
         {/* {this.renderLayerControl()} */}
-        <LayerManage map={this.map!} />
-        <MeasureTool map={this.map} className='' />
+        <LayerManage map={this.map!} visible={this.state.layerContainerVisible} onClick = {this.layerContainerVisibleToggle}/>
+        <MeasureTool map={this.map}/>
         {/* <LayerManage visible={this.state.layerContainerVisible} className='layerWindow' map={this.map!} /> */}
-      {/* </div> */}
+        {/* </div> */}
+        <strong className='strong-inlineBlock'/>
       </DraggableContainer>
     )
   }
@@ -123,7 +141,7 @@ export default class Map extends React.Component<IProps, IState> {
    */
   renderStationManager = () => {
     return (
-      <StationManager map = {this.map}/>
+      <StationManager map={this.map} />
     )
   }
 
@@ -140,34 +158,40 @@ export default class Map extends React.Component<IProps, IState> {
     })
   }
   render() {
-    const arcGISLayerServiceUrl = Config.baseMapLayers.baseLayers[0].url 
+    const arcGISLayerServiceUrl = Config.baseMapLayers.baseLayers[0].url
     const mapOption = {
       center: [116.581548, 35.404373],
       zoom: 10,
-      scaleControl: true
+      scaleControl: {
+        'maxWidth': 100,
+        'metric': true,
+        // 'containerClass': 'scaleControl'
+      }
     }
-    let full, zoom, /*direct,*/ gisToolBar, baseMapSwitcher, stationManager, userMenu
+    let full, zoomIn, zoomOut, /*direct,*/ gisToolBar, baseMapSwitcher, stationManager /*,userMenu*/
     if (this.state.hasMapLoaded!) {
       full = this.renderFull()
-      zoom = this.renderZoom()
+      zoomIn = this.renderZoomIn()
+      zoomOut = this.renderZoomOut()
       // direct = this.renderDirect()
       baseMapSwitcher = this.renderBaseMapSwitcher()
       gisToolBar = this.renderGisToolBar()
       baseMapSwitcher = this.renderBaseMapSwitcher()
       stationManager = this.renderStationManager()
-      userMenu =  this.renderUserMenu()
+      // userMenu = this.renderUserMenu()
     }
     return (
       <div className='MapInstance'>
         <MaptalksCom className='maptalksContainer' mapOptions={mapOption} isArcGISLayer arcGISLayerServiceUrl={arcGISLayerServiceUrl} onCreate={this.getMap} />
         {gisToolBar}
         {full}
-        {zoom}
+        {zoomIn}
+        {zoomOut}
         {/* {direct} */}
         {baseMapSwitcher}
         {stationManager}
-        {userMenu}
-        <MapNavHeader classNames='MapNavHeader' />
+        {/* {userMenu} */}
+        {/* <MapNavHeader classNames='MapNavHeader' /> */}
       </div>
     )
   }

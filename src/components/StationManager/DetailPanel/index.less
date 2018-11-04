@@ -1,0 +1,20 @@
+
+@import '../../../theme/theme.less';
+@goBack-height: 40px;
+._goBack{
+  width: @business-width;
+  height: @goBack-height;
+  line-height: 40px;
+  position: fixed;
+  color: @theme-app-background-color;
+  background-color: @primary-color;
+  box-shadow: 0 4px 12px 0 rgba(24, 144, 255, .24);
+  text-align: center;
+  cursor: pointer;
+  z-index:1;
+  
+}
+.widgetContent{
+  margin-top: @goBack-height;
+  min-height: 20 * @margin;
+}

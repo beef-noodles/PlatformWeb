@@ -1,11 +1,14 @@
 const config = {
   mapOptions: {
-    center: [0, 0],
-    zoom: 11,
+    center: [108.89124, 34.228625],
+    zoom: 15,
     baseLayer: {
-      urlTemplate: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-      subdomains: ['a', 'b', 'c', 'd'],
-      attribution: '&copy; <a href="http://osm.org">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/">CARTO</a>'
+      urlTemplate: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          subdomains: ['a', 'b', 'c'],
+          attribution: '&copy; <a href="http://www.osm.org" target="_blank">OpenStreetMap</a> contributors'
+    },
+    attribution: {
+      'content': '&copy;2018 <a target="_blank" href="http://www.summit.com.cn">Summit</a>'
     }
   }
 }

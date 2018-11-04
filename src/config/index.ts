@@ -1,6 +1,10 @@
 
 const Config = {
   projectName: 'Platform',
+  system: {
+    loadingText: '别急,努力加载ing'
+  },
+  // 底图
   baseMapLayers: {
     title: '底图切换',
     baseLayers: [
@@ -9,7 +13,7 @@ const Config = {
         type: 'esri',
         title: '影像图',
         image: './img/image.png',
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+        url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
       },
       {
         id: 'map',
@@ -18,19 +22,18 @@ const Config = {
         image: './img/map.png',
         url: 'http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer'
       },
-      
       {
         id: 'terrain',
         type: 'esri',
         title: '地形图',
         image: './img/terrain.png',
-        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer'
+        url: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer'
       }
     ]
   },
-  animateTime : 300,  //  rc-animate动画时间（ms ）
+  animateTime: 300,  //  rc-animate动画时间（ms ）
   LayerManager: {
-    layerArray:  [
+    layerArray: [
       {
         title: '切片服务',
         pkey: '-1',
@@ -123,6 +126,54 @@ const Config = {
       }
     ]
   },
+  // 站点指示器列表，到时候从后台获取
+  stationIndicators: [
+    {
+      'id': '4028d781669f1a1701669f453ff801ec',
+      'name': '水位站',
+      'type': 'ZZ',
+      'uri': '/img/zz.png',
+      'serialNumber': 0,
+      'status': 'true',
+      'warnNum': 2
+    },
+    {
+      'id': '4028d781669f1a1701669f478e8e01f9',
+      'name': '雨量站',
+      'type': 'PP',
+      'uri': '/img/pp.png',
+      'serialNumber': 1,
+      'status': 'true',
+      'warnNum': 8
+    },
+    {
+      'id': '4028d781669f1a1701669f47f7380206',
+      'name': 'IT设备',
+      'type': 'HOST',
+      'uri': '/img/host.png',
+      'serialNumber': 2,
+      'status': 'true',
+      'warnNum': 0
+    },
+    {
+      'id': '4028d781669f1a1701669f485d890207',
+      'name': '告警',
+      'type': 'WARN',
+      'uri': '/img/warn.png',
+      'serialNumber': 3,
+      'status': 'true',
+      'warnNum': 0
+    },
+    {
+      'id': '4028d781669fdb5e01669fdbff890001',
+      'name': '河道水文站',
+      'type': 'ZQ',
+      'uri': '/img/zq.png',
+      'serialNumber': 4,
+      'status': 'true',
+      'warnNum': 0
+    }
+  ]
 }
 
 

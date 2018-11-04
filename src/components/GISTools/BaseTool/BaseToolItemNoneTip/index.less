@@ -5,19 +5,23 @@
   height: 20px;
 }
 .toolbarItem{
-  display: inline-block;
+  display: flex;
   width: auto;
-  height: auto;
-  margin: 0px 8px;
+  height: 4*@margin; // 当前margin为8px
+  margin: 0px 1.5*@theme-app-blank-space;// 为保证元素间间距为24px
   transition: all @transition-duration;
   color: @theme-font-color1;
   cursor: pointer;
-  &:hover{
-      color: @primary-color;
+
+  .toolbarImg{
+    display: inline-block;
+    width: 4*@margin; // 当前margin为8px
+    height: 4*@margin; // 当前margin为8px
+    margin-right: @theme-app-blank-space; // 当前margin为8px
   }
-  .baseToolItemNoneTip-span{
-    line-height: 30px;
-    vertical-align: middle;
-    font-size: 16px;
+  .toolbarTitle{
+    display: inline-block;
+    height: 4*@margin; // 当前margin为8px
+    line-height: 4*@margin; // 当前margin为8px
   }
 }

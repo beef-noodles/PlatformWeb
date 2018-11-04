@@ -39,6 +39,12 @@ export default class MapNavHeader extends React.Component<IProps, IState> {
               </NavLink>
             </Col>
             <Col span={8} className='middle'>
+              <NavLink to='/routerTest'>
+                <img src={testImg} alt='嵌套路由' />
+                <div>嵌套路由</div>
+              </NavLink>
+            </Col>
+            <Col span={8} className='middle'>
               <NavLink to='/test'>
                 <img src={testImg} alt='404' />
                 <div>404</div>

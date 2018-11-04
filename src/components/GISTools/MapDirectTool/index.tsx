@@ -1,27 +1,28 @@
 import * as React from 'react'
-// import Draggable from 'react-draggable'
 import './index.less'
 
 
-
 interface IProps {
-  imgPath?: string
+  /**
+   * map对象
+   */
   map?: any
-  className?: string, // 样式
+  /**
+   * 样式名称
+   */
+  className?: string
 }
 
 interface IState {
-  imgPath?: string
   rotateAngle?: number // 旋转角度，默认为0
 }
 
 
 export default class DirectTool extends React.Component<IProps, IState> {
   map = this.props.map
-  constructor(props: IProps, stage: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
-      imgPath: this.props.imgPath ? this.props.imgPath : './img/b1.png',
       rotateAngle: 0
     }
     this.bearingAnaAngleReset.bind(this)
@@ -30,6 +31,7 @@ export default class DirectTool extends React.Component<IProps, IState> {
 
   componentDidMount() {
     this.map.on('mouseup', (msg) => {
+      console.log(msg)
       const currentAngle = this.bearingToAngle(this.map.getBearing())
       this.setState({
         rotateAngle: currentAngle

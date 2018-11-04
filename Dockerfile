@@ -1,4 +1,4 @@
-FROM nginx
+FROM abiosoft/caddy
 LABEL maintainer="guzhongren@live.cn"
-COPY ./build/ /usr/share/nginx/html
-EXPOSE 80
+COPY ./build/ /www
+COPY Caddyfile /etc/Caddyfile

@@ -7,47 +7,49 @@ import './index.less'
 import BaseToolItemNoneTip from '@components/GISTools/BaseTool/BaseToolItemNoneTip'
 import distance from './img/distance.png'
 import area from './img/area.png' // 面积测量图标
-import clear from './img/clear.png' // 清除图标
+// import clear from './img/clear.png' // 清除图标
 
 interface ITool {
-  imgPath: string,
+  className: string,
   title: string,
   handler: () => void
 }
 interface IProps {
-  className?: string, // 样式
-  map: any, // 地图实例
-  orientation?: string, // 工具条的方向， 默认水平
-  toolArr?: ITool[], // 工具条工具集合
+  /**
+   * 样式
+   */
+  className?: string, 
+  /**
+   * map实例
+   */
+  map: any, 
 }
 
 interface IState {
-  orientation?: 'row' | 'row-reverse' | 'column' | 'column-reverse', // 工具条的方向， 默认水平
   toolArr?: ITool[], // 工具条工具集合
 }
 
-class MeasureTool extends React.Component<IProps, IState> {
+export default class MeasureTool extends React.Component<IProps, IState> {
   map = this.props.map
   distanceTool : any // 距离测量  
   areaTool : any // 面积测量
   defaultCenter : any // 记录地图显示的默认中心点
   defaultZoom : any // 记录地图显示的默认zoom值
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
     this.state = {
-      orientation: 'row',
       toolArr:  [{
-        imgPath: distance,
+        className: '_distanceBackimg',
         title: '测距',
         handler: this.measureDistance
       } ,
       {
-        imgPath: area,
+        className: '_areaBackimg',
         title: '测面',
         handler: this.measureArea
       },
        {
-        imgPath: clear,
+        className: '_clearBackimg',
         title: '清除',
         handler: this.clear
       }]
@@ -144,7 +146,11 @@ class MeasureTool extends React.Component<IProps, IState> {
    * 距离测量
    */
   measureDistance = () => {
-    this.areaTool.disable()
+    if (this.areaTool.isEnabled()) {
+      this.areaTool.endDraw()
+      this.areaTool.clear() 
+      this.areaTool.disable()
+    }
     this.distanceTool.enable()
     this.map.setCursor('url(' + distance + ') 4 12, auto')
   }
@@ -152,7 +158,11 @@ class MeasureTool extends React.Component<IProps, IState> {
    * 面积测量
    */
   measureArea = () => {
-    this.distanceTool.disable()
+    if (this.distanceTool.isEnabled()) {
+      this.distanceTool.endDraw()
+      this.distanceTool.clear() 
+      this.distanceTool.disable()
+    }
     this.areaTool.enable()
     this.map.setCursor('url(' + area + ') 4 12, auto')
   }
@@ -221,6 +231,8 @@ class MeasureTool extends React.Component<IProps, IState> {
    * 清除所有地图常用小工具留在地图上的标记
    */
   clear = () => {
+    this.distanceTool.endDraw()
+    this.areaTool.endDraw()
     this.distanceTool.clear() // 清除距离测量结果
     this.areaTool.clear() // 清除面积测量结果
   }
@@ -233,7 +245,7 @@ class MeasureTool extends React.Component<IProps, IState> {
     return (
       this.state.toolArr!.map((item, key) => {
         return (
-          <BaseToolItemNoneTip title={item.title} key={key}  imgPath={item.imgPath} onClick={item.handler.bind(this)} />
+          <BaseToolItemNoneTip title={item.title} key={key}  className={item.className} onClick={item.handler.bind(this)} />
         )
       })
     )
@@ -245,5 +257,3 @@ class MeasureTool extends React.Component<IProps, IState> {
     )
   }
 }
-
-export default MeasureTool

@@ -1,224 +1,109 @@
 import * as React from 'react'
-import { Icon, Drawer, Menu, Tooltip } from 'antd'
-import { NavLink } from 'react-router-dom'
+import { Tooltip, message } from 'antd'
 import './index.less'
-import Input from '@material-ui/core/Input'
-import { MdList, MdSearch } from 'react-icons/md'
 import classnames from 'classnames'
-import MenuPanelContainer from './MenuPanelContainer/index'
-import MenuItemPanelContainer from './MenuItemPanelContainer/index'
-import DraggableContainer from '../DraggableContainer'
-import {VectorLayer, ui} from 'maptalks'
+import MenuDrawer from '@layouts/MenuDrawer'
+import ComplexContainer from '@components/ComplexContainer'
+import OperationPanel from './OperationPanel'
+import IndexDB from '@utils/IndexDB'
+import DetailPanel, { IInfoStructure } from './DetailPanel'
+import Config from '@config/index'
+import AnimateSearchHistory from '@components/AnimateSearchHistory'
+import { IItem } from '@components/IconMode'
 
-const InfoWindow = ui.InfoWindow
-
-
-import water from './img/water.png'
-import rain from './img/rain.png'
-import warning from './img/waring.png'
-import more from './img/more.png'
-
-import test1 from './img/01.png'
-import test3 from './img/03.png'
-import test4 from './img/04.png'
-import test5 from './img/05.png'
-import test6 from './img/06.png'
-import test7 from './img/07.png'
-import test8 from './img/08.png'
-import test9 from './img/09.png'
-import test10 from './img/10.png'
+import OPSPoints, {OPSToken} from '@components/StationManager/OPSPoints'
+import PubSub from 'pubsub-js'
 
 
-
-const SubMenu = Menu.SubMenu
-const MenuItemGroup = Menu.ItemGroup
-
-// interface IMenuArr {
-//   imgPath? : string // 图片路径
-//   title ? : string // 功能mingc
-//   key ? : string  // 唯一值，标识功能
-//   handler: (value) => void
-// }
-interface IHistory {
-  key?: string
-  value?: string
-  checked?: boolean
+/**
+ * 由输入框触发，让operationPanel查询的条件结构
+ *
+ * @interface IParams
+ */
+interface IParams {
+  time: number,
+  station: IItem
 }
+
 interface IState {
   inputValue?: string, // 输入信息
   menuDrawerVisible?: boolean, // 抽屉式菜单是否展示
-  menuPanelVisible?: boolean, // 菜单面板是否显示
-  menuItemPanelVisible?: boolean //  功能展示面板是否显示 
-  currentPanel: 'MenuItemPanelContainer' | 'MenuPanelContainer' // 当前被加载的组件
-  moreVisible?: boolean // 更多的显示与隐藏
-  menuArr?: {} // 展示的功能按钮数组，氛围默认显示和鼠标悬浮在更多按钮上显示的内容
-  history? : IHistory[]
-  data?: any
+  // history?: IHistory[]
+  /**
+   * 主操作面板是否展示
+   */
+  isOperationPanelShow?: boolean,
+  /**
+   * 详情面板是否展示
+   */
+  isDetailPanelShow?: boolean
+  /**
+   * 搜索历史记录是否展示
+   */
+  historyData: any[]
+  historyListVisible: boolean,
+  goToDetailInfo?: IInfoStructure,
+  /**
+   * 由输入框触发，让operationPanel查询的条件结构
+   */
+  queryParams?: IParams
 }
+
 interface IProps {
-  map?: any // map 对象
+  /**
+   * map 对象
+   */
+  map?: any
 }
 
 export default class StationManager extends React.Component<IProps, IState> {
   searchInput: any
   map = this.props.map
   isMount: boolean
-  history: IHistory[] = []
   currentMenuItem = ''
   menuItemPanelVisible = false
+  indexDB: any
+  OPSPoints : any
+  historyData: any[] = []
+  historyKeyList: string[] = [] // 存放站类中文名称|zhan|zhan|
   constructor(props: IProps) {
     super(props)
     this.state = {
       inputValue: '',
-      menuDrawerVisible: false,
-      currentPanel: 'MenuPanelContainer',
-      menuPanelVisible: false,
-      menuItemPanelVisible: false,
-      moreVisible: false,
-      menuArr: {
-        default: [
-          {
-            imgPath: water,
-            title: '水情',
-            key: 'water',
-            handler: this.waterHandler
-          },
-
-          {
-            imgPath: rain,
-            title: '雨情',
-            key: 'rain',
-            handler: this.rainHandler
-          },
-
-          {
-            imgPath: warning,
-            title: '预警',
-            key: 'warning',
-            handler: this.warningHandler
-          },
-          {
-            imgPath: test1,
-            title: '测试1',
-            key: '1',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test3,
-            title: '测试2',
-            key: '2',
-            handler: this.testHandler
-          },
-          {
-            imgPath: more,
-            title: '更多',
-            key: 'more',
-            handler: this.moreHandler
-          }
-        ],
-        more: [
-          {
-            imgPath: test1,
-            title: '测试1',
-            key: '1',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test3,
-            title: '测试2',
-            key: '2',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test4,
-            title: '测试3',
-            key: '3',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test5,
-            title: '测试4',
-            key: '4',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test6,
-            title: '测试5',
-            key: '5',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test7,
-            title: '测试6',
-            key: '6',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test8,
-            title: '测试8',
-            key: '8',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test9,
-            title: '测试9',
-            key: '9',
-            handler: this.testHandler
-          },
-          {
-            imgPath: test10,
-            title: '测试10',
-            key: '10',
-            handler: this.testHandler
-          }
-        ]
-      }
+      isOperationPanelShow: true,
+      isDetailPanelShow: false,
+      historyListVisible: false, // 历史记录是否显示
+      historyData: []
     }
+    this.indexDB = new IndexDB()
+    this.processHistoryKey(Config.stationIndicators)
+    this.OPSPoints = new OPSPoints(this.map)
   }
 
+  /**
+   * 将站类的中文名成提取出来存入数组
+   *
+   * @memberof StationManager
+   */
+  processHistoryKey = (stationList) => {
+    stationList.map((item: any) => {
+      this.historyKeyList.push(item.name)
+    })
+  }
   componentDidMount() {
     this.isMount = true
-    this.map.on('click', (evt) => {
-      if (this.state.menuPanelVisible === true && this.isMount === true) {
-        this.setState({
-          menuPanelVisible: false
-        }, () => {
-          this.searchInput.blur()
-        })
-      }
-      // 地图identify marker
-      this.map.identify({
-        'coordinate' : evt.coordinate,
-        'layers' : this.map.getLayers((layer) => {
-          return (layer instanceof VectorLayer)
-        })
-      }, (geos) => {
-        if (geos.length === 0) {
-          return
-        } else {
-          geos.forEach( (g) => {
-            // console.log(g)
-            g.updateSymbol({
-              'markerFill' : '#f00'
-            })
-            // const options = {
-            //   'title'     : `水情站:`,
-            //   'content'   : `上报时间: `,
-            //   'autoOpenOn' : 'click',
-            //   'autoCloseOn' : 'click'
-            // }
-            const infoWindow = new InfoWindow(g._infoWinOptions)
-            infoWindow.on('hide', () => {
-              infoWindow.remove()
-            })
-            infoWindow.addTo(this.map).show()
-          })
-        }
-      })
+    this.getIndexDBForHistory()
+    // =============== 运维所有需要在GIS地图上显示的点的获取和符号化以及点击地图上符号详情页的打开 =================
+    this.OPSPoints.getAllOPSPoints()
+    PubSub.subscribe(OPSToken, (msg , data) => {
+      console.log(msg)
+      this.goToDetail(data)
     })
+    // =============== 运维所有需要在GIS地图上显示的点的获取和符号化以及点击地图上符号详情页的打开 =================
   }
 
   componentWillUnmount() {
+    PubSub.unsubscribe(OPSToken)
     this.isMount = false
   }
 
@@ -232,323 +117,235 @@ export default class StationManager extends React.Component<IProps, IState> {
 
   onChangeUserName = (e) => {
     this.setState({
-      inputValue: e.target.value
+      inputValue: e.target.value,
     })
   }
 
-
   controlMenu = () => {
     this.setState({
-      menuDrawerVisible: !this.state.menuDrawerVisible
+      menuDrawerVisible: !this.state.menuDrawerVisible,
     })
   }
 
   onClose = () => {
     this.setState({
-      menuDrawerVisible: !this.state.menuDrawerVisible
+      menuDrawerVisible: !this.state.menuDrawerVisible,
     })
   }
 
   handleMenuClick = (e) => {
     console.log('click ', e)
   }
-
   handleInputChange = () => {
     const value = this.searchInput.value
     this.setState({
-      inputValue: value
+      inputValue: value,
     })
+    if (value.length > 0) {
+      this.searchHistoryUnVisible()
+    } else {
+      this.searchHistoryVisible()
+    }
   }
 
   handleKeyPress = (evt) => {
     const keyCode = evt.which || evt.charCode
     if (keyCode === 13) {
-      console.log('我去后台找东西了')
+      this.startSearch(evt.target.value)
     }
   }
 
-
-  
-    // ==================================历史记录相关方法===============================================
-
   /**
-   * 判断对象数组array中是否已存在key值为keyPara的对象
-   * 存在返回true，不存在返回false
+   * 从详情返回事件处理
+   *
    */
-  itemInArray = (keyPara, array) => {
-    let flag = false
-    if (array) {
-      const length = array.length
-      if (length < 1) {
-        flag = false
-      } else if (length >= 1) {
-        for (const value of array) {
-          if (value.key === keyPara) {
-            flag = true
-            break
-          } else {
-            flag = false
-          }
-        }
-      }
-    }
-    return flag
+  handleBack = () => {
+    this.setState({
+      isDetailPanelShow: false,
+      isOperationPanelShow: true
+    })
+  }
+  /**
+   * 跳转到详情页
+   *
+   */
+  goToDetail = (item: any) => {
+    // console.log(item)
+    this.setState({
+      isDetailPanelShow: true,
+      isOperationPanelShow: false,
+      goToDetailInfo: item
+    })
+
+    // 定位
   }
 
   /**
-   * 更新状态值history,控制历史记录显示
+   * 历史记录操作
+   *
+   * @memberof StationManager
    */
-  updateHistoryState = (historyPara) => {
-    if (this.isMount) {
+  historyListClick = (value) => {
+    this.searchInput.value = value // 点击的历史搜索关键字显示在搜索框中
+    let station: IItem
+    if (this.livedInStations(value)) {
+      station = this.livedInStations(value)!
       this.setState({
-        history : historyPara
+        inputValue: value,
+        queryParams: {
+          time: new Date().getTime(),
+          station
+        }
       })
     }
   }
+
   /**
-   * 向历史记录中添加元素
+   * 搜索历史记录面板显示
    */
-  addHistory = (keyPara: string, valuePara: string) => {
-    if (keyPara !== 'more') { // 防止点击更多按钮时出现对应的历史记录
-      const historyItem = {
-        key: keyPara,
-        value: valuePara,
-        checked: true
-      }
-      const flag = this.itemInArray(keyPara, this.history)
-      if (flag === false) {
-        this.history!.unshift(historyItem)
-      }
-    }
-    this.updateHistoryState (this.history)
-  }
-  /**
-   * 修改指定历史记录状态
-   * flag = 'toggle' // 切换指定key值checkbox的勾选状态
-   * flag = 'delete' // 删除指定key值的历史记录
-   */
-  changeHistoryState = (flag, keyPara, checked) => {
-    if (flag === 'toggle') {
-      this.changeCheckbocCheckedState(keyPara, checked)
-    } else if (flag === 'delete') {
-      this.deleteHistoryItem(keyPara)
+  searchHistoryVisible = () => {
+    if (this.isMount && this.state.historyListVisible !== true) {
+      this.setState({
+        historyListVisible: true
+      })
     }
   }
 
   /**
-   * 指定key值的历史记录checkbox是否勾选
+   * 搜索历史记录面板显示隐藏的切换
+   */
+  searchHistoryUnVisible = () => {
+    if (this.isMount && this.state.historyListVisible !== false) {
+      this.setState({
+        historyListVisible: false
+      })
+    }
+  }
+  getIndexDBForHistory = () => {
+    this.historyData = []
+    this.indexDB.getData(
+      (res: any) => {
+        this.historyData.unshift(res)
+        this.setState({
+          historyData: this.historyData
+        })
+      }
+    )
+  }
+
+  /**
+   * 搜索框失去焦点事件
+   */
+  searchInputOnBlur = () => {
+    setTimeout(this.searchHistoryUnVisible, 100) // 这里做演示是为了确保在历史记录组件消失之前获取到清空历史纪录的点击事件
+    // this.searchHistoryToggle()
+  }
+  /**
+   * 搜索框获取焦点事件
+   */
+  searchInputonFocus = () => {
+    this.searchHistoryVisible()
+  }
+  /**
+   * 判断是否存在该站类，如果没有则返回－１，　如果有返回该站
    *
    * @memberof StationManager
    */
-  changeCheckbocCheckedState = (keyPara, checked) => {
-    for (const value of this.history!) {
-      if (value.key === keyPara) {
-        value.checked = checked
-        break
-      }
-    }
-    this.updateHistoryState (this.history) // 修改state history
-  }
-  /**
-   * 删除对象数组中指定key值的对象
-   */
-  delectObjectFromObjectArrayByObjectKey = (key, objectArray) => {
-    for (const value of objectArray!) {
-      if (value.key === key) {
-        const index = objectArray!.indexOf(value)
-        objectArray!.splice(index, 1)
-        break
-      }
-    }
-  }
-  /**
-   * 删除history中指定元素并更新state history
-   *
-   * @memberof StationManager
-   */
-  deleteHistoryItem = (keyPara) => {
-    this.delectObjectFromObjectArrayByObjectKey(keyPara, this.history)
-    this.updateHistoryState (this.history)
-  }
-
-
-  // ==================================历史记录相关方法===============================================
-
-
-
-
-
-  // ==================================组件渲染相关方法===============================================
-  /**
-   * 加载组件MenuPanel,并设置其可见性为true 
-   * 
-   * 考虑，卸载时是否需要将显示状态设为false
-   *
-   * @memberof StationManager
-   */
-  menuPanelLoadedAndShow = () => {
-    this.setState({
-      currentPanel: 'MenuPanelContainer',
-      menuPanelVisible: true
+  livedInStations = (value: string) => {
+    const index = this.historyKeyList.findIndex((key: string) => {
+      return key.includes(value)
     })
+    if (index >= 0) {
+      const matched = this.historyKeyList[index]
+      return Config.stationIndicators.filter((item) => {
+        return item.name === matched
+      })[0]
+    } else {
+      return null
+    }
   }
   /**
-   * 渲染 MenuPanelContainer 组件
-   */
-  renderMenuPanelContainer = () => {
-    return (
-      <MenuPanelContainer 
-      map = {this.map}
-      visible={this.state.menuPanelVisible} 
-      moreVisible={this.state.moreVisible} 
-      menuArr={this.state.menuArr}
-      history={this.state.history} 
-      changeHistoryState={this.changeHistoryState} />
-    )
-  }
-  /**
-   * 渲染 MenuItemPanelContainer 组件
-   */
-  renderMenuItemPanelContainer = () => {
-    return (
-      <MenuItemPanelContainer
-      map = {this.map} 
-      menuItemPanelClose={this.menuPanelLoadedAndShow} 
-      currentMenuItem={this.currentMenuItem} 
-      visible={this.state.menuItemPanelVisible} />
-    )
-  }
-
-  /**
-   * 渲染抽屉类导航栏
+   * 开始查询
+   *
    * @memberof StationManager
    */
-  renderMenuDrawer = () => {
-    return (
-      <Drawer
-        title='导航栏'
-        placement='left'
-        width={350}
-        closable={false}
-        onClose={this.onClose.bind(this)}
-        visible={this.state.menuDrawerVisible}
-      >
-        <Menu
-          onClick={this.handleMenuClick}
-          style={{ width: 326 }}
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          mode='inline'
-        >
-          <Menu.Item key='1'>
-            {/* <Icon type='pie-chart' /> */}
-            <NavLink to='/'>
-              <Icon type='home' />
-              主页
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key='2'>
-            <NavLink to='/demo'>
-              <Icon type='pie-chart' />
-              Demo示例
-            </NavLink>
-          </Menu.Item>
-          <SubMenu key='sub1' title={<span><Icon type='mail' /><span>Navigation One</span></span>}>
-            <MenuItemGroup key='g1' title='Item 1'>
-              <Menu.Item key='1'>Option 1</Menu.Item>
-              <Menu.Item key='2'>Option 2</Menu.Item>
-            </MenuItemGroup>
-            <MenuItemGroup key='g2' title='Item 2'>
-              <Menu.Item key='3'>Option 3</Menu.Item>
-              <Menu.Item key='4'>Option 4</Menu.Item>
-            </MenuItemGroup>
-          </SubMenu>
-          <SubMenu key='sub2' title={<span><Icon type='appstore' /><span>Navigation Two</span></span>}>
-            <Menu.Item key='5'>Option 5</Menu.Item>
-            <Menu.Item key='6'>Option 6</Menu.Item>
-            <SubMenu key='sub3' title='Submenu'>
-              <Menu.Item key='7'>Option 7</Menu.Item>
-              <Menu.Item key='8'>Option 8</Menu.Item>
-            </SubMenu>
-          </SubMenu>
-          <SubMenu key='sub4' title={<span><Icon type='setting' /><span>Navigation Three</span></span>}>
-            <Menu.Item key='9'>Option 9</Menu.Item>
-            <Menu.Item key='10'>Option 10</Menu.Item>
-            <Menu.Item key='11'>Option 11</Menu.Item>
-            <Menu.Item key='12'>Option 12</Menu.Item>
-          </SubMenu>
-        </Menu>
-      </Drawer>
-    )
+  startSearch = (searchKeyWord: string) => {
+    let lievedStation: IItem
+    const trimedValue = this.trim(searchKeyWord)
+    if (trimedValue.length > 0) {
+      if (this.livedInStations(trimedValue)) {
+        lievedStation = this.livedInStations(trimedValue)!
+        const datas = [{
+          id: new Date(),
+          title: trimedValue
+        }]
+        this.indexDB.addData(datas).then(() => {
+          this.getIndexDBForHistory()
+          const param: IParams = {
+            time: new Date().getTime(),
+            station: lievedStation
+          }
+          this.setState({
+            queryParams: param
+          })
+        })
+      } else {
+        message.warning(`没有符合${trimedValue}的站类，请重新输入。`)
+      }
+    } else {
+      message.warning(`请输入要查询的站类！`)
+    }
   }
-   // ==================================组件渲染相关方法===============================================
 
-
-
-   // ==================================功能项被点击相关处理方法===============================================
-   
-   /**
-    * 被点击 menuItem 的key值
-    */
-   menuItemClick = (key) => {
-    this.currentMenuItem = key
+  onClearClick = () => {
+    this.indexDB.deleteAllData()
     this.setState({
-      currentPanel: 'MenuItemPanelContainer',
-      menuItemPanelVisible: true
+      historyData: []
     })
-   }
+    this.searchHistoryUnVisible()
+  }
 
-   /**
-    * 水情
-    */
-   waterHandler = (key, value) => {
-    this.addHistory(key, value)
-    this.menuItemClick(key)
-  }
   /**
-   * 雨情
+   * 去掉字符串两端的空格
+   * 使用js的trim()方法不能达到效果
+   *
+   * @memberof StationManager
    */
-  rainHandler = (key, value) => {
-    this.addHistory(key, value)
-    this.menuItemClick(key)
+  trim = (x) => {
+    return x.replace(/^\s+|\s+$/gm, '')
   }
-  /**
-   * 预警
-   */
-  warningHandler = (key, value) => {
-    this.addHistory(key, value)
-    this.menuItemClick(key)
-  }
-  /**
-   * 更多
-   * 该方法没有实际用处但不可删除
-   */
-  moreHandler = (key, value) => {
-    console.log('more')
-  }
-  /**
-   * 测试
-   */
-  testHandler = (key, value) => {
-    this.addHistory(key, value)
-    this.menuItemClick(key)
-  }
- 
-   // ==================================功能项被点击相关处理方法===============================================
-  
-  
-   render() {
-    const currentPanel = this.state.currentPanel === 'MenuPanelContainer' ? this.renderMenuPanelContainer() : this.renderMenuItemPanelContainer()
+
+  render() {
+    const props = {
+      menuClick: this.handleMenuClick
+    }
     const searchStyle = classnames('inputSearch', { 'ableToSearch': (this.state.inputValue!.length > 0) })
-    const menuDrawer = this.renderMenuDrawer()
     return (
-      <DraggableContainer className='stationManager'>
-        <Tooltip title='菜单'><MdList className='menuDrawerIcon' onClick={this.controlMenu.bind(this)} /></Tooltip>
-        <Input disableUnderline placeholder='请输入查询条件...' inputRef={ref => { this.searchInput = ref }} className='stationInput' onFocus={this.menuPanelLoadedAndShow} onChange={this.handleInputChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} />
-        <Tooltip title='搜索' placement={'right'} arrowPointAtCenter><MdSearch className={searchStyle} /></Tooltip>
-        {menuDrawer}
-        {currentPanel}
-      </DraggableContainer>
+      <React.Fragment>
+        <div className='stationManager'>
+          <strong className='strong-inlineBlock' />
+          <Tooltip title='菜单'>
+            <div className='menuDrawerIcon' onClick={this.controlMenu} />
+          </Tooltip>
+          <input placeholder='请输入查询条件...' onBlur={this.searchInputOnBlur} onFocus={this.searchInputonFocus} ref={ref => {
+            this.searchInput = ref
+          }} className='not-draggable stationInput' onChange={this.handleInputChange}
+            onKeyPress={this.handleKeyPress} />
+          <Tooltip title='搜索' placement={'right'} arrowPointAtCenter>
+            <div onClick={this.startSearch.bind(this, this.state.inputValue)} className={searchStyle} />
+          </Tooltip>
+          <strong className='strong-inlineBlock' />
+          <MenuDrawer closeHandle={this.onClose} visible={this.state.menuDrawerVisible!} props={props} />
+        </div>
+        <ComplexContainer className={`_complexContainerLayout `} style={{ display: (this.state.isOperationPanelShow ? 'block' : 'none') }}>
+          <OperationPanel className={`${!this.state.isOperationPanelShow ? '_disOperationPanelDisplay' : '_operationPanelDisplay'}`} map = {this.map} onClick={this.goToDetail} queryFromInput={this.state.queryParams} />
+        </ComplexContainer>
+        <ComplexContainer className={`_complexContainerLayout `} >
+          {this.state.isDetailPanelShow ? <DetailPanel info={this.state.goToDetailInfo!} className={`${!this.state.isDetailPanelShow ? '_disDetailPanelDisplay' : '_detailPanelDisplay'}`} onBack={this.handleBack} /> : ''}
+        </ComplexContainer>
+
+        <AnimateSearchHistory className={`_searchHistory`} visible={this.state.historyListVisible} onListClick={this.historyListClick} onClearClick={this.onClearClick} data={this.state.historyData} />
+      </React.Fragment>
     )
   }
 }

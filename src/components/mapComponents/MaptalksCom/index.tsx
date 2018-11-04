@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {TileLayer, SpatialReference, Map} from 'maptalks'
+import { TileLayer, SpatialReference, Map } from 'maptalks'
 import 'maptalks/dist/maptalks.css'
 import config from './config'
 import './index.less'
@@ -17,23 +17,19 @@ interface IProps {
 
 export default class MaptalksCom extends React.Component<IProps, IState> {
   map: any
-  mapContainer: HTMLDivElement| null
+  mapContainer: HTMLDivElement | null
 
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props)
+    const mapOption = config.mapOptions
     // 地图默认配置
-    const mapOptions = config.mapOptions
-    const mapDefaultOptions = {
-      center: mapOptions.center,
-      zoom: mapOptions.zoom,
-      baseLayer: new TileLayer('base', {
-        urlTemplate: mapOptions.baseLayer.urlTemplate,
-        subdomains: mapOptions.baseLayer.subdomains,
-        attribution: mapOptions.baseLayer.attribution
-      })
-    }
     this.state = {
-      mapOptions: Object.assign({}, ...[mapDefaultOptions], this.props.mapOptions)
+      mapOptions: Object.assign({}, ...[{
+        center: mapOption.center,
+        zoom: mapOption.zoom,
+        baseLayer: new TileLayer('base', mapOption.baseLayer),
+        attribution: mapOption.attribution
+      }], this.props.mapOptions)
     }
   }
 
@@ -44,18 +40,18 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
     }, (errInfo) => {
       console.error(errInfo)
     })
-    .then(() => {
-      if (this.props.onCreate) {
-        this.props.onCreate(this.map)
-      }
-    })
+      .then(() => {
+        if (this.props.onCreate) {
+          this.props.onCreate(this.map)
+        }
+      })
   }
   refs: {
     [key: string]: any
   }
   render() {
     const style = this.props.className ? this.props.className : 'maptalksCom'
-    return(
+    return (
       <div ref={node => this.mapContainer = node} className={style} />
     )
   }
@@ -66,20 +62,17 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
    * @returns Promise
    * @memberof MaptalksCom
    */
-  constructMap(mapContainer: HTMLDivElement| null) {
+  constructMap(mapContainer: HTMLDivElement | null) {
+    const self = this
     return new Promise((resolve, reject) => {
       if (mapContainer) {
-        if (this.props.isArcGISLayer) {
-          const arcUrl = this.props.arcGISLayerServiceUrl
-          SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err, conf) => {
+        if (self.props.isArcGISLayer) {
+          const arcUrl = self.props.arcGISLayerServiceUrl
+          SpatialReference.loadArcgis(arcUrl + '?f=pjson', (err) => {
             if (err) {
               throw new Error(err)
             }
-            const options = Object.assign({}, ...[this.state.mapOptions], ...[{
-              // center: config.mapOptions.center,
-              // zoom: config.mapOptions.zoom,
-              // maxZoom: 20,
-              // minZoom: 4,
+            const options = Object.assign({}, ...[self.state.mapOptions], ...[{
               spatialReference: {
                 projection: 'EPSG:4326'
               },
@@ -89,13 +82,12 @@ export default class MaptalksCom extends React.Component<IProps, IState> {
                 },
                 'urlTemplate': arcUrl + '/tile/{z}/{y}/{x}',
                 'attribution': '&copy; <a target="_blank" href="' + arcUrl + '"">ArcGIS</a>'
-              }),
-              attribution: false
+              })
             }])
             resolve(new Map(mapContainer, options))
           })
         } else {
-          resolve(new Map(this.mapContainer, this.state.mapOptions))
+          resolve(new Map(self.mapContainer, self.state.mapOptions))
         }
       } else {
         reject('Invalid map container div')
