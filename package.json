@@ -7,7 +7,7 @@
     "vendorDev": "cross-env NODE_ENV=development webpack --config webpack.vendor.js",
     "vendorPro": "cross-env NODE_ENV=production webpack --config webpack.vendor.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js",
-    "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js"",
+    "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js",
     "live": "live-server ./build",
     "lint": "tslint ./src/**/*.tsx",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
