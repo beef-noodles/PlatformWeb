@@ -4,7 +4,7 @@
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Storybook](http://github.com/storybooks/press/blob/master/badges/storybook.svg)](https://andorlab.summit.com)
-
+[![Build Status](https://travis-ci.org/beef-noodles/PlatformWeb.svg?branch=master)](https://travis-ci.org/beef-noodles/PlatformWeb)
 
 ## Node版本
 
