@@ -10,7 +10,7 @@
     "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js",
     "live": "live-server ./build",
     "lint": "yarn _typeCheck && yarn _tsLint",
-    "testCoverage": "jest --coverage && echo '需要设置collectCoverage为true' && live-server ./coverage/lcov-report ",
+    "testCoverage": "jest --coverage && live-server ./coverage/lcov-report ",
     "test": "jest",
     "_typeCheck": "tsc --project tsconfig.json --noEmit",
     "_tsLint": "tslint -p ./tsconfig.json ./src/**/*.{ts,tsx}",
