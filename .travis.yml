@@ -30,5 +30,5 @@ deploy:
   #fqdn: $CUSTOM_DOMAIN
   name: $GIT_NAME
   email: $GIT_EMAIL
-  on:
-    branch: master
+  target-branch: master
+  on: master
