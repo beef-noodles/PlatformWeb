@@ -13,7 +13,7 @@ const {
   GenerateSW
 } = require('workbox-webpack-plugin')
 // const tsImportPluginFactory = require('ts-import-plugin')
-const publicUrl = isProduction ? 'https://beef-noodles.github.io/PlatformWeb' : '/'
+const publicUrl = isProduction ? './PlatformWeb/' : '/'
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
