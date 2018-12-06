@@ -3,9 +3,17 @@
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![Storybook](http://github.com/storybooks/press/blob/master/badges/storybook.svg)](https://andorlab.summit.com)
+[![Storybook](https://raw.githubusercontent.com/storybooks/press/6baccd1d177c070b24503df97ccb1d790499626f/badges/storybook.svg)](https://andorlab.summit.com)
 [![Build Status](https://travis-ci.org/beef-noodles/PlatformWeb.svg?branch=master)](https://travis-ci.org/beef-noodles/PlatformWeb)
 [![codecov](https://codecov.io/gh/beef-noodles/PlatformWeb/branch/master/graph/badge.svg)](https://codecov.io/gh/beef-noodles/PlatformWeb)
+[![GitHub stars](https://img.shields.io/github/stars/beef-noodles/PlatformWeb.svg)](https://github.com/beef-noodles/PlatformWeb/stargazers)
+
+[![](https://img.shields.io/badge/Node-V10%2B-green.svg)](https://nodejs.org/zh-cn/)
+[![](https://img.shields.io/badge/React-V16%2B-blue.svg)](https://reactjs.org/)
+[![](https://img.shields.io/badge/Webpack-V4%2B-yellowgreen.svg)](https://webpack.js.org/)
+[![](https://img.shields.io/badge/antd-v3.11.0-blue.svg)](https://ant.design/index-cn)
+
+[![GitHub license](https://img.shields.io/github/license/beef-noodles/PlatformWeb.svg)](https://github.com/beef-noodles/PlatformWeb/blob/master/LICENSE)
 
 ## Node版本
 
