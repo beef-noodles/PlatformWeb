@@ -12,7 +12,7 @@ install:
   - yarn
 
 script:
-  - yarn test
+  - yarn testCoverage
 
 after_success:
   - codecov
