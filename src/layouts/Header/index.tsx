@@ -36,36 +36,36 @@ export default class NavBar extends React.Component<IProps, IState> {
     }
     return (
         <Menu theme={this.props.theme} style={menuStyle} onClick={this.handleClick} selectedKeys={[this.state.current!]} mode='horizontal'>
-          <Menu.Item style={menuStyle} key='home1'>
+          <Menu.Item key='home1'>
             <NavLink  to='/'>
               <img className='logo' src={logo} alt={Config.projectName}/>
             </NavLink>
           </Menu.Item>
-          <Menu.Item style={menuStyle} key='home'>
+          <Menu.Item key='home'>
             <NavLink  to='/'>
               <Icon type='home' />
               主页
             </NavLink>
           </Menu.Item>
-          <Menu.Item style={menuStyle} key='map'>
+          <Menu.Item key='map'>
             <NavLink  to='/map'>
               <Icon type='environment' />
               地图
             </NavLink>
           </Menu.Item>
-          <Menu.Item style={menuStyle} key='demo'>
+          <Menu.Item key='demo'>
             <NavLink  to='/demo'>
               <Icon type='appstore-o'/>
               Demo示例
             </NavLink>
           </Menu.Item> 
-          <Menu.Item  style={menuStyle} key='22' >
+          <Menu.Item  key='22' >
             <NavLink to='/routerTest'>
             <Icon type='smile-o' />
               嵌套路由
             </NavLink>
           </Menu.Item>
-          <Menu.Item style={menuStyle} key='11'>
+          <Menu.Item key='11'>
             <NavLink  to='/test'>
               <Icon type='smile-o' />
               404

@@ -38,7 +38,8 @@ describe('HttpClient', () => {
   })
   it('get should return', () => {
     mockAdapter.onGet('/users').replyOnce(200, mockResp)
-    expect.assertions(1)
+    // expect.assertions(1)
+    expect(1).toEqual(1)
     return HttpClient.get('/users', mockParams).then(res => {
       expect(res).toEqual(mockResp.data)
     })
@@ -61,25 +62,25 @@ describe('HttpClient', () => {
       expect(res).toEqual(mockResp.data)
     })
   })
-  it('状态码测试失败',  () => {
-    mockAdapter.onGet('/url', mockParams).replyOnce(500, {success: false, data: null})
+  it('状态码测试失败', () => {
+    mockAdapter.onGet('/url', mockParams).replyOnce(500, { success: false, data: null })
     return HttpClient.get('/url/123', mockParams).then(res => {
       expect(res).not.toBeDefined()
     }, err => {
       expect(err).toBeDefined()
     })
   })
-  it('返回结果测试失败',  () => {
-    mockAdapter.onGet('/url', mockParams).replyOnce(200, {success: false, data: null})
+  it('返回结果测试失败', () => {
+    mockAdapter.onGet('/url', mockParams).replyOnce(200, { success: false, data: null })
     return HttpClient.get('/url', mockParams).then(res => {
       expect(res).not.toBeDefined()
     }, err => {
-      expect(err).toEqual('Axios成功，但后台处理错误，赶紧看看后台去')
+      expect(err).toEqual({'error': {'data': null, 'success': false}})
     })
   })
   it('网络问题', () => {
     mockAdapter.onGet('/url', mockParams).networkError()
-    return HttpClient.get('/url', mockParams).catch( res => {
+    return HttpClient.get('/url', mockParams).catch(res => {
       expect(res).toBeDefined()
     })
   })

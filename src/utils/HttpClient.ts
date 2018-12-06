@@ -51,10 +51,10 @@ function apiAxios(method, url, params) {
       .then((res) => {
         if (res.status === 200) {
           const data = res.data
-          if (data.code === 'HOMS-0000') {
+          if (data.success ===  true) {
             data.data ? resolve(data.data) : resolve(true)
           } else {
-            console.error('服务器状态不对', data)
+            // console.error('服务器状态不对', data)
             reject({error: data})
           }
         } else {

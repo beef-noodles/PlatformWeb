@@ -72,7 +72,7 @@
       "jest-canvas-mock"
     ],
     "setupTestFrameworkScriptFile": "./setupTests.ts",
-    "testRegex": "(/test/.*|\\.(test|spec))\\.(ts|tsx|jsx|js)$",
+    "testRegex": "\\.(test|spec)\\.(ts|tsx|jsx|js)$",
     "moduleNameMapper": {
       "\\.(less|scss|css|jpg|png|svg)$": "jest-css-modules",
       "^@config(.*)$": "<rootDir>/src/config$1",
@@ -155,7 +155,7 @@
     "babel-runtime": "^6.26.0",
     "browserslist": "^4.2.0",
     "classnames": "^2.2.6",
-    "clean-webpack-plugin": "^0.1.19",
+    "clean-webpack-plugin": "^1.0.0",
     "console-polyfill": "^0.3.0",
     "copy-webpack-plugin": "^4.5.2",
     "cross-env": "^5.2.0",
