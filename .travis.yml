@@ -22,7 +22,7 @@ after_success:
 
 env:
  global:
-   - GH_REF: git@github.com:beef-noodles/PlatformWeb.git
+   - GH_REF: github.com/beef-noodles/PlatformWeb.git
 
 after_script:
   - cd ./docs
