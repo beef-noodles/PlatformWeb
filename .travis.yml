@@ -7,9 +7,12 @@ node_js:
   - "10"
 
 install:
-  - npm install -g  yarn
+  - npm install -g yarn
+  - npm install -g codecov
   - yarn
-  - npm install codecov -g
+
+script:
+  - yarn test
 
 after_success:
   - codecov
