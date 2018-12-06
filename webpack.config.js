@@ -22,7 +22,7 @@ module.exports = {
   output: {
     filename: 'static/js/[name]_bundle.js',
     chunkFilename: 'static/js/[name]_bundle.js',
-    path: path.resolve(__dirname, './build/'),
+    path: path.resolve(__dirname, './docs/'),
     publicPath: publicUrl
   },
   devServer: {
@@ -187,7 +187,7 @@ module.exports = {
     // DllPlugin
     // new webpack.DllReferencePlugin({
     //   context: __dirname,
-    //   manifest: require((isProduction ? './build' : './public') + '/dist/js/vendor-manifest.json')
+    //   manifest: require((isProduction ? './docs' : './public') + '/dist/js/vendor-manifest.json')
     // }),
     new ProgressBarPlugin({
       format: 'build [:bar] :percent (:elapsed seconds)',
@@ -201,7 +201,7 @@ module.exports = {
   ].concat(!isProduction ? [
     new webpack.HotModuleReplacementPlugin()
   ] : [
-    new CleanWebpackPlugin('./build'),
+    new CleanWebpackPlugin('./docs'),
     new WebpackParallelUglifyPlugin({
       uglifyES: {
         mangle: false,
@@ -260,19 +260,19 @@ module.exports = {
     }),
     new CopyWebpackPlugin([{
       from: './public/config.js',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, 'docs'),
       toType: 'dir'
     }, {
       from: './public/manifest.json',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, 'docs'),
       toType: 'dir'
     }, {
       from: './public/icon.png',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, 'docs'),
       toType: 'dir'
     }, {
       from: './public/favicon.ico',
-      to: path.resolve(__dirname, 'build'),
+      to: path.resolve(__dirname, 'docs'),
       toType: 'dir'
     }]),
     new GenerateSW({
